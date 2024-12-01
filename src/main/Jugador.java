@@ -29,6 +29,16 @@ public class Jugador {
             mano.add(carta);
         }
     }
+    public void addCard(Card card) {
+        // Pre: card no es null
+        // Pos: Agrega la carta a la mano del jugador
+        if (card != null) {
+            this.mano.add(card);
+            System.out.println(nombre + " ha recibido la carta: " + card);
+        } else {
+            System.out.println("La carta proporcionada es nula y no se puede añadir.");
+        }
+    }
 
     public void descartarCartas() {
         mano.clear();

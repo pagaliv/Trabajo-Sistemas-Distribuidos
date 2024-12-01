@@ -29,7 +29,14 @@ public class PlayerHandler implements Runnable {
             out.println("¡Bienvenido al servidor de Mus!");
 
             // Registrar el jugador
-            String nombre = solicitarNombreJugador();
+            String nombre = in.readLine();
+            if (nombre == null || nombre.trim().isEmpty()) {
+                out.println("Nombre inválido. Conexión cerrada.");
+                cerrarConexion();
+                return; // Terminar el proceso si no se recibe un nombre válido
+            }
+
+
             jugador = new Jugador(nombre);  // Crear el jugador con su nombre
 
             // Asignamos el PrintWriter al jugador para enviarle mensajes
@@ -37,7 +44,9 @@ public class PlayerHandler implements Runnable {
 
             // Añadir jugador al servidor
             servidor.addPlayer(jugador);
-            System.out.println("Jugador conectado: " + jugador.getNombre());
+            System.out.println("Jugador conectado: " + jugador.getNombre());// Inicialización de flujos
+
+
 
             // Escucha de mensajes del cliente
             String mensaje;

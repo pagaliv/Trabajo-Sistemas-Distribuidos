@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/MD/Card.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/MD/Compara.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/MD/Deck.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/MD/Suit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/Cliente.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/Jugador.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/PlayerHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/Servidor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Cliente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/PlayerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/PlayerHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Servidor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Servidor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +24,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2pJN1boFbJBpsIJ9OLHwY4FyEtL" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -50,7 +47,12 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.Cliente">
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="main" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Cliente2">
     <configuration name="Cliente" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="main.Cliente" />
       <module name="untitled3" />
@@ -60,6 +62,13 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Cliente2" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="main.Cliente" />
+      <module name="untitled3" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -77,10 +86,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Cliente2" />
+      <item itemvalue="Application.Cliente" />
+      <item itemvalue="Application.Servidor" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Cliente" />
         <item itemvalue="Application.Servidor" />
+        <item itemvalue="Application.Cliente" />
       </list>
     </recent_temporary>
   </component>
@@ -96,10 +110,24 @@
       <workItem from="1732480159634" duration="614000" />
       <workItem from="1732566964742" duration="597000" />
       <workItem from="1732865617532" duration="1710000" />
+      <workItem from="1732960668113" duration="39000" />
+      <workItem from="1732963392779" duration="6092000" />
+      <workItem from="1733046518987" duration="7038000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/Cliente.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

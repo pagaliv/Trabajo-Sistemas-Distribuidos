@@ -11,65 +11,52 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Servidor {
+
     private ServerSocket serverSocket;
 
     private static final int PORT = 12345;
     private final List<Jugador> jugadores = Collections.synchronizedList(new ArrayList<>());
+    static ExecutorService threadPool=null; //lo he hecho estatico porque me lo pedia el compilador, pero no estoy seguro de que tenga que serlo (BORRAR ANTES DE ENTREGAR, SI ERES JAVIER Y LEER ESTO IGNORALO)
 
-
-    private static final int MAX_CLIENTS = 10; // Número máximo de clientes concurrentes
-    private static boolean running = true;
-
+    private static final int MAX_CLIENTS = 4; // Número máximo de clientes concurrentes
     public static void main(String[] args) {
+        // Crear una instancia del servidor y ejecutarla
+        Servidor servidor = new Servidor();
+        servidor.start();
+    }
+    public void start() {
         // Usar try-with-resources para gestionar ServerSocket
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            System.out.println("Servidor iniciado en el puerto " + PORT);
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) { //Crea el socket del servidor
+            System.out.println("Servidor iniciado en el puerto " + PORT); //Dice el puerto en el que se crea el server
 
             // Usar un pool de hilos para manejar múltiples clientes
-            ExecutorService threadPool = Executors.newFixedThreadPool(MAX_CLIENTS);
+            threadPool = Executors.newFixedThreadPool(MAX_CLIENTS); //Crea una pool de hilos que usara a posteriori
 
-            while (running) {
+            while (!Thread.interrupted()) {
                 try {
                     // Aceptar nueva conexión
                     Socket clientSocket = serverSocket.accept();
                     System.out.println("Cliente conectado desde " + clientSocket.getInetAddress());
 
                     // Procesar solicitud en un nuevo hilo
-                    threadPool.submit(() -> procesarSolicitud(clientSocket));
+                    PlayerHandler handler = new PlayerHandler(clientSocket,this);
+                    threadPool.submit(handler);
                 } catch (IOException e) {
                     System.out.println("Error al aceptar conexión: " + e.getMessage());
                 }
             }
 
-            // Apagar el pool de hilos al cerrar el servidor
-            threadPool.shutdown();
+
 
         } catch (IOException e) {
             System.out.println("Error en el servidor: " + e.getMessage());
+        }finally {
+            // Apagar el pool de hilos al cerrar el servidor
+            threadPool.shutdown();
         }
     }
 
-    public static void procesarSolicitud(Socket clientSocket) {
-        try (clientSocket) { // Cierra automáticamente el socket al finalizar
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 
-            String mensaje;
-            while ((mensaje = in.readLine()) != null) {
-                System.out.println("Mensaje recibido: " + mensaje);
-
-                // Responder al cliente
-                out.println("Servidor: Recibí tu mensaje -> " + mensaje);
-
-                if ("salir".equalsIgnoreCase(mensaje)) {
-                    System.out.println("Cliente desconectado.");
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error al procesar solicitud: " + e.getMessage());
-        }
-    }
 
 
     /**

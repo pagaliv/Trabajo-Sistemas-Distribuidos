@@ -1,7 +1,9 @@
 package main;
-
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Cliente {
     private Socket socket;
@@ -16,13 +18,29 @@ public class Cliente {
     }
 
     public void start() {
+        boolean nombreCorrrecto=false;
+        String regex = "^[a-zA-Z0-9]+$";
+        String nombre= null;
+        Pattern pattern = Pattern.compile(regex); // Compilar la expresión regular
+
+
+        while (!nombreCorrrecto){
+                System.out.println("Escribe tu nombre de jugador");
+                Scanner scanner = new Scanner(System.in);
+                nombre=scanner.nextLine();
+                Matcher matcher = pattern.matcher(nombre);
+                nombreCorrrecto= matcher.matches();
+            }
+
+
         try {
+            //inicialización de variables
             socket = new Socket(host, port);
             System.out.println("Conectado al servidor en " + host + ":" + port);
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
-
+            sendMessage(nombre);
             // Hilo para escuchar mensajes del servidor
             new Thread(new ServerListener()).start();
 
@@ -32,7 +50,7 @@ public class Cliente {
                 System.out.println("Escribe un mensaje para enviar al servidor ('salir' para desconectar):");
                 while ((userInput = consoleInput.readLine()) != null) {
                     if (userInput.equalsIgnoreCase("salir")) {
-                        disconnect();
+
                         break;
                     }
                     sendMessage(userInput);
@@ -40,25 +58,37 @@ public class Cliente {
             }
         } catch (IOException e) {
             System.out.println("Error al conectar al servidor: " + e.getMessage());
+        }finally { //cerrar recursos
+            disconnect();
         }
     }
 
     public void sendMessage(String message) {
         if (out != null) {
             out.println(message);
+        } else {
+            System.err.println("El flujo de salida es null. No se puede enviar el mensaje.");
         }
     }
 
+
     public void disconnect() {
         try {
-            if (socket != null) {
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+            if (socket != null && !socket.isClosed()) {
                 socket.close();
             }
             System.out.println("Desconectado del servidor.");
         } catch (IOException e) {
-            System.out.println("Error al desconectar: " + e.getMessage());
+            System.out.println("Error al cerrar recursos: " + e.getMessage());
         }
     }
+
 
     private class ServerListener implements Runnable {
         @Override

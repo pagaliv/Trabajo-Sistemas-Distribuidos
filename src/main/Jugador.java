@@ -39,6 +39,12 @@ public class Jugador {
             System.out.println("La carta proporcionada es nula y no se puede añadir.");
         }
     }
+    public void showHand() {
+        System.out.println("Mano del jugador " + this.nombre + ":");
+        for (Card carta : this.mano) {
+            System.out.println(carta.toString());
+        }
+    }
 
     public void descartarCartas() {
         mano.clear();

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
     public class Juego {
-        private List<Jugador> jugadores;
-        private Deck deck;
+        private  List<Jugador> jugadores;
+        private  Deck deck;
         private int indiceJugadorActual;
 
         // Constructor
@@ -31,7 +31,22 @@ import java.util.List;
             System.out.println("¡El juego ha comenzado!");
             notificarTurnoActual();
         }
+        public void iniciar() {
+            System.out.println("La partida ha comenzado.");
 
+            // Ejemplo: repartir cartas a los jugadores
+            deck.shuffle();
+            for (Jugador jugador : jugadores) {
+                for (int i = 0; i < 4; i++) { // Repartir 4 cartas por jugador
+                    jugador.addCard(deck.extractCard(0));
+                }
+                jugador.showHand(); // Mostrar la mano del jugador
+            }
+
+            // Definir el primer turno
+            System.out.println("Turno del jugador: " + jugadores.get(0).getNombre());
+            // Aquí podrías implementar la lógica para manejar los turnos
+        }
         // Reparte cartas a los jugadores
         private void repartirCartas() {
             int cartasPorJugador = 4; // Ejemplo: cada jugador recibe 4 cartas

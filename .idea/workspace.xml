@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="funciona bien sorprendentemente">
-      <change afterPath="$PROJECT_DIR$/src/main/Juego.java" afterDir="false" />
+    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="creado clase juego">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Jugador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Jugador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Juego.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Juego.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Servidor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Servidor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +117,7 @@
       <workItem from="1732865617532" duration="1710000" />
       <workItem from="1732960668113" duration="39000" />
       <workItem from="1732963392779" duration="6092000" />
-      <workItem from="1733046518987" duration="8399000" />
+      <workItem from="1733046518987" duration="9418000" />
     </task>
     <task id="LOCAL-00001" summary="funciona bien sorprendentemente">
       <created>1733053856893</created>
@@ -126,7 +126,14 @@
       <option name="project" value="LOCAL" />
       <updated>1733053856893</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="creado clase juego">
+      <created>1733071977015</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1733071977015</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -134,7 +141,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="funciona bien sorprendentemente" />
-    <option name="LAST_COMMIT_MESSAGE" value="funciona bien sorprendentemente" />
+    <MESSAGE value="creado clase juego" />
+    <option name="LAST_COMMIT_MESSAGE" value="creado clase juego" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

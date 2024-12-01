@@ -71,8 +71,23 @@ public class Servidor {
             if (!jugadores.contains(jugador)) {
                 jugadores.add(jugador);
                 System.out.println("Jugador añadido: " + jugador.getNombre());
+            } if (jugadores.size() == MAX_CLIENTS) {
+                startGame();
             }
         }
+    }
+    private void startGame() {
+        // Pre: La lista de jugadores tiene exactamente MAX_CLIENTS jugadores.
+        // Pos: Inicia la partida con los jugadores conectados.
+        System.out.println("¡Todos los jugadores están conectados! Iniciando la partida...");
+
+        // Por ejemplo, enviar un mensaje a todos los jugadores
+        broadcastMessage("La partida está comenzando...");
+
+        // Aquí podrías inicializar la lógica del juego, como asignar cartas, iniciar turnos, etc.
+        // Esto podría incluir instanciar un objeto de la clase `Juego` y pasarle la lista de jugadores.
+        Juego juego = new Juego(jugadores);
+        juego.iniciar();
     }
     /**
      * Envía un mensaje a todos los jugadores conectados.

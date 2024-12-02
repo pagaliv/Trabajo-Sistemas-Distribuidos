@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
     public class Juego {
-        private  List<Jugador> jugadores;
+        private  List<PlayerHandler> jugadores;
         private  Deck deck;
         private int indiceJugadorActual;
 
         // Constructor
-        public Juego(List<Jugador> jugadores) {
+        public Juego(List<PlayerHandler> jugadores) {
             // Pre: La lista de jugadores no está vacía
             // Post: Inicializa el juego con los jugadores y un mazo de cartas
             this.jugadores = new ArrayList<>(jugadores);
@@ -20,40 +20,39 @@ import java.util.List;
         }
 
         // Método para inicializar el juego
-        public void iniciarJuego() {
-            // Barajar el mazo
-            this.deck.shuffle();
 
-            // Repartir cartas a los jugadores
-            repartirCartas();
-
-            // Notificar el inicio del juego
-            System.out.println("¡El juego ha comenzado!");
-            notificarTurnoActual();
-        }
         public void iniciar() {
             System.out.println("La partida ha comenzado.");
 
             // Ejemplo: repartir cartas a los jugadores
             deck.shuffle();
-            for (Jugador jugador : jugadores) {
+            for (PlayerHandler jugador : jugadores) {
                 for (int i = 0; i < 4; i++) { // Repartir 4 cartas por jugador
-                    jugador.addCard(deck.extractCard(0));
+                    jugador.Jugador().addCard(deck.extractCard());
                 }
-                jugador.showHand(); // Mostrar la mano del jugador
+                jugador.Jugador().showHand(); // Mostrar la mano del jugador
+                for (PlayerHandler jugadorIterativo:jugadores){
+                    jugadorIterativo.sendMensajeJugador("Estas son tus cartas");
+                    for (Card carta : jugadorIterativo.Jugador().getMano()) {
+
+                        jugadorIterativo.sendMensajeJugador(carta.toString());
+                    }
+
+
+                }
             }
 
             // Definir el primer turno
-            System.out.println("Turno del jugador: " + jugadores.get(0).getNombre());
+            System.out.println("Turno del jugador: " + jugadores.get(0).Jugador().getNombre());
             // Aquí podrías implementar la lógica para manejar los turnos
         }
         // Reparte cartas a los jugadores
         private void repartirCartas() {
             int cartasPorJugador = 4; // Ejemplo: cada jugador recibe 4 cartas
             for (int i = 0; i < cartasPorJugador; i++) {
-                for (Jugador jugador : jugadores) {
+                for (PlayerHandler jugador : jugadores) {
                     if (deck.getNumeroCartas() > 0) {
-                        jugador.addCard(deck.deleteCardInPosition(0));
+                        jugador.Jugador().addCard(deck.deleteCardInPosition(0));
                     }
                 }
             }
@@ -72,7 +71,7 @@ import java.util.List;
 
         // Notifica de quién es el turno actual
         private void notificarTurnoActual() {
-            Jugador jugadorActual = jugadores.get(indiceJugadorActual);
+            Jugador jugadorActual = jugadores.get(indiceJugadorActual).Jugador();
             System.out.println("Es el turno de: " + jugadorActual.getNombre());
         }
 

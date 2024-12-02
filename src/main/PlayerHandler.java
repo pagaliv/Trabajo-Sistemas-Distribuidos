@@ -17,6 +17,9 @@ public class PlayerHandler implements Runnable {
         this.socket = socket;
         this.servidor = servidor;
     }
+    public Jugador Jugador(){
+        return this.jugador;
+    }
 
     @Override
     public void run() {
@@ -43,7 +46,7 @@ public class PlayerHandler implements Runnable {
             jugador.setOut(out);  // Usamos un método setter en Jugador
 
             // Añadir jugador al servidor
-            servidor.addPlayer(jugador);
+            servidor.addPlayer(this);
             System.out.println("Jugador conectado: " + jugador.getNombre());// Inicialización de flujos
 
 
@@ -73,15 +76,26 @@ public class PlayerHandler implements Runnable {
         out.println("Por favor, introduce tu nombre:");
         return in.readLine();
     }
+    public void sendMensajeJugador(String msg){
+        out.println(msg);
+    }
+
 
     private void cerrarConexion() {
         try {
-            if (socket != null) {
-                socket.close();
-            }
+            if (in != null) in.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        }try {
+            if (out != null) out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }try {
+            if (socket != null && !socket.isClosed()) socket.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }
 

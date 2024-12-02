@@ -23,6 +23,7 @@ public class Jugador {
         this.out = null; // Inicializado como null, se asignará más tarde
     }
 
+
     // Métodos para gestionar las cartas del jugador
     public void recibirCarta(Card carta) {
         if (carta != null) {
@@ -113,6 +114,7 @@ public class Jugador {
             out.println(message);
         }
     }
+
 
 }
 

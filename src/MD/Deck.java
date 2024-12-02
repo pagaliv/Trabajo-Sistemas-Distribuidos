@@ -85,6 +85,14 @@ public class Deck {
         }
         return this.listaDeCards.get(posicion);
     }
+    public Card extractCard() {
+        // Si el mazo tiene cartas, extraemos la carta en la primera posición y la eliminamos
+        if (!listaDeCards.isEmpty()) {
+            return listaDeCards.remove(0); // Elimina y devuelve la carta en la primera posición
+        }
+        return null; // Si no hay cartas, retorna null
+    }
+
     public void showBaraja(){
         //Pre:
         //Pos: show the Dick

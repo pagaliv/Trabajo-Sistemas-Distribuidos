@@ -27,13 +27,14 @@ import java.util.List;
             informarCompanyero();
             //  repartir cartas a los jugadores
             deck.shuffle();
+            mensajeTodosJugadores("Estas son tus cartas");
             for (PlayerHandler jugador : jugadores) {
                 for (int i = 0; i < 4; i++) { // Repartir 4 cartas por jugador
                     jugador.Jugador().addCard(deck.extractCard());
                 }
                 jugador.Jugador().showHand(); // Mostrar la mano del jugador
+
                 for (PlayerHandler jugadorIterativo:jugadores){
-                    jugadorIterativo.sendMensajeJugador("Estas son tus cartas");
                     for (Card carta : jugadorIterativo.Jugador().getMano()) {
                         jugadorIterativo.sendMensajeJugador(carta.toString());
                     }

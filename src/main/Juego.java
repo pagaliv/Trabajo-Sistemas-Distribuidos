@@ -24,7 +24,7 @@ import java.util.List;
         public void iniciar() {
             int ronda;
             System.out.println("La partida ha comenzado.");
-
+            informarCompanyero();
             //  repartir cartas a los jugadores
             deck.shuffle();
             for (PlayerHandler jugador : jugadores) {
@@ -43,7 +43,7 @@ import java.util.List;
 
             // Definir el primer turno
             System.out.println("Turno del jugador: " + jugadores.get(0).Jugador().getNombre());
-            // Aquí podrías implementar la lógica para manejar los turnos
+            // Aquí  implementar la lógica para manejar los turnos
         }
         // Reparte cartas a los jugadores
         private void repartirCartas() {

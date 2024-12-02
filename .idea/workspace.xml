@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="este trabajo es el grinch de mi vida">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="poco a poco toma forma rara">
       <change beforePath="$PROJECT_DIR$/src/main/Juego.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Juego.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/PlayerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/PlayerHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +115,7 @@
       <workItem from="1732480159634" duration="614000" />
       <workItem from="1732566964742" duration="597000" />
       <workItem from="1732865617532" duration="1710000" />
-      <workItem from="1733168374136" duration="7808000" />
+      <workItem from="1733168374136" duration="8162000" />
     </task>
     <task id="LOCAL-00001" summary="este trabajo es el grinch de mi vida">
       <created>1733180113540</created>
@@ -126,7 +124,21 @@
       <option name="project" value="LOCAL" />
       <updated>1733180113540</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="poco a poco toma forma">
+      <created>1733181881590</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1733181881590</updated>
+    </task>
+    <task id="LOCAL-00003" summary="poco a poco toma forma rara">
+      <created>1733182092059</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1733182092059</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -134,6 +146,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="este trabajo es el grinch de mi vida" />
-    <option name="LAST_COMMIT_MESSAGE" value="este trabajo es el grinch de mi vida" />
+    <MESSAGE value="poco a poco toma forma" />
+    <MESSAGE value="poco a poco toma forma rara" />
+    <option name="LAST_COMMIT_MESSAGE" value="poco a poco toma forma rara" />
   </component>
 </project>

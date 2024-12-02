@@ -35,11 +35,8 @@ import java.util.List;
                 for (PlayerHandler jugadorIterativo:jugadores){
                     jugadorIterativo.sendMensajeJugador("Estas son tus cartas");
                     for (Card carta : jugadorIterativo.Jugador().getMano()) {
-
                         jugadorIterativo.sendMensajeJugador(carta.toString());
                     }
-
-
                 }
 
             }
@@ -80,6 +77,12 @@ import java.util.List;
             for(PlayerHandler jugadoresIterados:jugadores){
                 jugadoresIterados.sendMensajeJugador(msg);
             }
+        }
+        private void informarCompanyero(){
+            jugadores.get(0).Jugador().sendMessage("Tu compañero es "+ jugadores.get(2).Jugador().getNombre());
+            jugadores.get(2).Jugador().sendMessage("Tu compañero es "+ jugadores.get(0).Jugador().getNombre());
+            jugadores.get(1).Jugador().sendMessage("Tu compañero es "+ jugadores.get(3).Jugador().getNombre());
+            jugadores.get(3).Jugador().sendMessage("Tu compañero es "+ jugadores.get(1).Jugador().getNombre());
         }
 
         // Maneja la acción realizada por un jugador

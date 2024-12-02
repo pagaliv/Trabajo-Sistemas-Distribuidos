@@ -76,7 +76,7 @@ public class PlayerHandler implements Runnable {
         out.println("Por favor, introduce tu nombre:");
         return in.readLine();
     }
-    public void sendMensajeJugador(String msg){
+    public void sendMensajeJugador(String msg) {
         out.println(msg);
     }
 

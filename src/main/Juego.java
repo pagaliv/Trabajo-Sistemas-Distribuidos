@@ -22,9 +22,10 @@ import java.util.List;
         // Método para inicializar el juego
 
         public void iniciar() {
+            int ronda;
             System.out.println("La partida ha comenzado.");
 
-            // Ejemplo: repartir cartas a los jugadores
+            //  repartir cartas a los jugadores
             deck.shuffle();
             for (PlayerHandler jugador : jugadores) {
                 for (int i = 0; i < 4; i++) { // Repartir 4 cartas por jugador
@@ -40,6 +41,7 @@ import java.util.List;
 
 
                 }
+
             }
 
             // Definir el primer turno
@@ -73,6 +75,11 @@ import java.util.List;
         private void notificarTurnoActual() {
             Jugador jugadorActual = jugadores.get(indiceJugadorActual).Jugador();
             System.out.println("Es el turno de: " + jugadorActual.getNombre());
+        }
+        private void mensajeTodosJugadores(String msg){
+            for(PlayerHandler jugadoresIterados:jugadores){
+                jugadoresIterados.sendMensajeJugador(msg);
+            }
         }
 
         // Maneja la acción realizada por un jugador

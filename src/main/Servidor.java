@@ -73,7 +73,9 @@ public class Servidor {
      */
     public void addPlayer(PlayerHandler jugador) {
         synchronized (jugadores) {
-            if (!contieneJugador(jugador.Jugador())) {
+            if(contieneJugador(jugador.Jugador())){
+                jugador.desconectarJugador();
+            } else if(!contieneJugador(jugador.Jugador())) {
                 jugadores.add(jugador);
                 System.out.println("Jugador añadido: " + jugador.Jugador().getNombre());
             } if (jugadores.size() == MAX_CLIENTS) {

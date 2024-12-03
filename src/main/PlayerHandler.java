@@ -84,6 +84,24 @@ public class PlayerHandler implements Runnable {
         }
         return null;
     }
+    public void desconectarJugador() {
+        try {
+            // Informar al jugador de la desconexión
+            if (out != null) {
+                out.println("Has sido desconectado del servidor.");
+            }
+
+            // Remover al jugador del servidor
+            servidor.removePlayer(jugador);
+
+            // Cerrar la conexión
+            cerrarConexion();
+
+            System.out.println("Jugador desconectado: " + (jugador != null ? jugador.getNombre() : "Desconocido"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
     private void cerrarConexion() {

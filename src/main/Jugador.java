@@ -2,6 +2,8 @@ package main;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import MD.Card;
 
 public class Jugador {
@@ -114,7 +116,9 @@ public class Jugador {
             out.println(message);
         }
     }
-
+    public boolean equals(Jugador other){
+        return this.nombre.equals(other.nombre);
+    }
 
 }
 

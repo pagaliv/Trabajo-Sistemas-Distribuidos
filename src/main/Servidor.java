@@ -69,7 +69,7 @@ public class Servidor {
      */
     public void addPlayer(PlayerHandler jugador) {
         synchronized (jugadores) {
-            if (!jugadores.contains(jugador)) {
+            if (contieneJugador(jugador.Jugador())) {
                 jugadores.add(jugador);
                 System.out.println("Jugador añadido: " + jugador.Jugador().getNombre());
             } if (jugadores.size() == MAX_CLIENTS) {
@@ -89,6 +89,14 @@ public class Servidor {
         // Esto podría incluir instanciar un objeto de la clase `Juego` y pasarle la lista de jugadores.
         Juego juego = new Juego(jugadores);
         juego.iniciar();
+    }
+    public boolean contieneJugador(Jugador jugador){
+        for(PlayerHandler jugadoresIterados: jugadores){
+            if(jugadoresIterados.Jugador().equals(jugador)){
+                return true;
+            }
+        }
+        return false;
     }
     /**
      * Envía un mensaje a todos los jugadores conectados.

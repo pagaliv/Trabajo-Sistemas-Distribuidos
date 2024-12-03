@@ -72,12 +72,17 @@ public class PlayerHandler implements Runnable {
         }
     }
 
-    private String solicitarNombreJugador() throws IOException {
-        out.println("Por favor, introduce tu nombre:");
-        return in.readLine();
-    }
+
     public void sendMensajeJugador(String msg) {
         out.println(msg);
+    }
+    public String recibirLineaJugador() {
+        try {
+            return in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

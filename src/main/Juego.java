@@ -43,8 +43,13 @@ import java.util.List;
 
 
             // Definir el primer turno
-            System.out.println("Turno del jugador: " + jugadores.get(0).Jugador().getNombre());
+           mensajeTodosJugadores("Turno del jugador: " + jugadores.get(0).Jugador().getNombre());
             // Aquí  implementar la lógica para manejar los turnos
+            while (comprobarGanador()){
+                if(cortaroMus()){
+                    mensajeTodosJugadores("No ha habido mus");
+                }
+            }
         }
         // Reparte cartas a los jugadores
         private void repartirCartas() {
@@ -57,7 +62,16 @@ import java.util.List;
                 }
             }
         }
-
+        public boolean cortaroMus(){
+            for(int i=0; i<4;i++){
+                jugadores.get(i).sendMensajeJugador("Que desea hacer cortar(0) o Mus(1), escribalo textualmente, sino no surtira efecto");
+                String msg= jugadores.get(i).recibirLineaJugador();
+                if(msg.equals("0")){
+                    return true;
+                }
+            }
+            return false;
+        }
         // Cambia al siguiente turno
         public void pasarTurno() {
             indiceJugadorActual = (indiceJugadorActual + 1) % jugadores.size();
@@ -104,6 +118,9 @@ import java.util.List;
         public void finalizarJuego() {
             System.out.println("El juego ha terminado.");
             // Puedes agregar lógica para determinar el ganador o limpiar recursos
+        }
+        public boolean comprobarGanador(){
+            return jugadores.get(0).Jugador().getPuntuacion()>=40 &&  jugadores.get(2).Jugador().getPuntuacion()>=40 ;
         }
     }
 

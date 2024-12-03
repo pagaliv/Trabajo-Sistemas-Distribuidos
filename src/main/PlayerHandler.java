@@ -78,12 +78,22 @@ public class PlayerHandler implements Runnable {
     }
     public String recibirLineaJugador() {
         try {
-            return in.readLine();
+            String linea = in.readLine(); // Intentar leer la línea
+            if (linea == null || linea.isEmpty()) {
+                System.out.println("Se recibió una línea vacía o nula.");
+                return null;
+            }
+            return linea;
         } catch (IOException e) {
+            System.err.println("Error al leer mensaje del jugador: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Error inesperado: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
     }
+
     public void desconectarJugador() {
         try {
             // Informar al jugador de la desconexión

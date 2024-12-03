@@ -16,8 +16,106 @@ public class Cliente {
         this.host = host;
         this.port = port;
     }
-
     public void start() {
+        if (!conectar()) {
+            return; // Salir si la conexión falla
+        }
+
+        identificarJugador(); // Fase 1: Identificación
+        esperarConfiguracionInicial(); // Fase 2: Configuración inicial
+
+        jugar(); // Fase 3: Interacción en el juego
+
+        disconnect(); // Fase 4: Desconexión
+    }
+    public void jugar() {
+        System.out.println("¡El juego ha comenzado!");
+
+        try (BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
+            String userInput;
+            while ((userInput = consoleInput.readLine()) != null) {
+                if (userInput.equalsIgnoreCase("salir")) {
+                    sendMessage("salir");
+                    break;
+                }
+
+                // Procesar comandos del jugador (ejemplo: "cortar", "mus", etc.)
+                manejarAccion(userInput);
+            }
+        } catch (IOException e) {
+            System.out.println("Error durante el juego: " + e.getMessage());
+        }
+    }
+    public void manejarAccion(String accion) {
+        switch (accion.toLowerCase()) {
+            case "cortar":
+                sendMessage("cortar");
+                System.out.println("Has decidido cortar.");
+                break;
+            case "mus":
+                sendMessage("mus");
+                System.out.println("Has decidido Mus.");
+                break;
+            default:
+                System.out.println("Acción no válida. Intenta de nuevo.");
+                break;
+        }
+    }
+
+
+    public void identificarJugador() {
+        String regex = "^[a-zA-Z0-9]+$";
+        Pattern pattern = Pattern.compile(regex);
+
+        Scanner scanner = new Scanner(System.in);
+        String nombre = null;
+        boolean nombreCorrecto = false;
+
+        while (!nombreCorrecto) {
+            System.out.println("Escribe tu nombre de jugador:");
+            nombre = scanner.nextLine();
+            if (pattern.matcher(nombre).matches()) {
+                nombreCorrecto = true;
+            } else {
+                System.out.println("Nombre inválido. Usa solo letras y números.");
+            }
+        }
+
+        sendMessage(nombre);
+        System.out.println("Nombre enviado al servidor.");
+    }
+    public void esperarConfiguracionInicial() {
+        System.out.println("Esperando configuración inicial del juego...");
+        try {
+            // Leer mensajes iniciales (como "Tus cartas son..." o "Turno inicial...")
+            String mensaje;
+            while ((mensaje = in.readLine()) != null) {
+                System.out.println("Servidor: " + mensaje);
+
+                // Si el servidor indica que la configuración está lista, salimos del bucle
+                if (mensaje.contains("Configuración lista")) {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al recibir la configuración inicial: " + e.getMessage());
+        }
+    }
+
+    public boolean conectar() {
+        try {
+            socket = new Socket(host, port);
+            System.out.println("Conectado al servidor en " + host + ":" + port);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+            return true;
+        } catch (IOException e) {
+            System.out.println("Error al conectar al servidor: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public void start2() {
         boolean nombreCorrrecto=false;
         String regex = "^[a-zA-Z0-9]+$";
         String nombre= null;
@@ -53,6 +151,7 @@ public class Cliente {
 
                         break;
                     }
+
                     sendMessage(userInput);
                 }
             }

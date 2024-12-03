@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="Problema de enseñar cartas resuelto">
+    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="solucionado problema de varios personas con el mismo nombre">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Cliente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Juego.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Juego.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/PlayerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/PlayerHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Servidor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Servidor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -42,7 +45,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.Cliente">
+  <component name="RunManager" selected="Application.Servidor">
     <configuration name="Cliente" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="main.Cliente" />
       <module name="untitled3" />
@@ -118,7 +121,7 @@
       <workItem from="1732865617532" duration="1710000" />
       <workItem from="1733168374136" duration="8162000" />
       <workItem from="1733230409537" duration="5633000" />
-      <workItem from="1733253913979" duration="425000" />
+      <workItem from="1733253913979" duration="5003000" />
     </task>
     <task id="LOCAL-00001" summary="este trabajo es el grinch de mi vida">
       <created>1733180113540</created>
@@ -162,7 +165,14 @@
       <option name="project" value="LOCAL" />
       <updated>1733231842948</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="solucionado problema de varios personas con el mismo nombre">
+      <created>1733254582364</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1733254582364</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,22 +184,7 @@
     <MESSAGE value="poco a poco toma forma rara" />
     <MESSAGE value="mejoras añadidas I" />
     <MESSAGE value="Problema de enseñar cartas resuelto" />
-    <option name="LAST_COMMIT_MESSAGE" value="Problema de enseñar cartas resuelto" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/Servidor.java</url>
-          <line>74</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/Juego.java</url>
-          <line>45</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="solucionado problema de varios personas con el mismo nombre" />
+    <option name="LAST_COMMIT_MESSAGE" value="solucionado problema de varios personas con el mismo nombre" />
   </component>
 </project>

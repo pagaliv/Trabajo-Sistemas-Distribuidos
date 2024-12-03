@@ -17,7 +17,7 @@ public class Servidor {
     private static final int PORT = 12345;
     private final List<PlayerHandler> jugadores = Collections.synchronizedList(new ArrayList<>());
     static ExecutorService threadPool=null; //lo he hecho estatico porque me lo pedia el compilador, pero no estoy seguro de que tenga que serlo (BORRAR ANTES DE ENTREGAR, SI ERES JAVIER Y LEER ESTO IGNORALO)
-
+    private Juego juego=null;
     private static final int MAX_CLIENTS = 4; // Número máximo de clientes concurrentes
     public static void main(String[] args) {
         // Crear una instancia del servidor y ejecutarla
@@ -93,7 +93,7 @@ public class Servidor {
 
         // Aquí podrías inicializar la lógica del juego, como asignar cartas, iniciar turnos, etc.
         // Esto podría incluir instanciar un objeto de la clase `Juego` y pasarle la lista de jugadores.
-        Juego juego = new Juego(jugadores);
+        juego = new Juego(jugadores);
         juego.iniciar();
     }
     public boolean contieneJugador(Jugador jugador){

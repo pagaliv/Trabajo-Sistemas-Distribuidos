@@ -40,7 +40,7 @@ import java.util.List;
                     }
             }
 
-
+             mensajeTodosJugadores("Configuración lista");
 
             // Definir el primer turno
            mensajeTodosJugadores("Turno del jugador: " + jugadores.get(0).Jugador().getNombre());
@@ -120,7 +120,7 @@ import java.util.List;
             // Puedes agregar lógica para determinar el ganador o limpiar recursos
         }
         public boolean comprobarGanador(){
-            return jugadores.get(0).Jugador().getPuntuacion()>=40 &&  jugadores.get(2).Jugador().getPuntuacion()>=40 ;
+            return jugadores.get(0).Jugador().getPuntuacion()<=40 ||  jugadores.get(2).Jugador().getPuntuacion()<=40 ;
         }
     }
 

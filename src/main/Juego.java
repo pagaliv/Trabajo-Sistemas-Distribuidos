@@ -32,15 +32,15 @@ import java.util.List;
                 for (int i = 0; i < 4; i++) { // Repartir 4 cartas por jugador
                     jugador.Jugador().addCard(deck.extractCard());
                 }
-                jugador.Jugador().showHand(); // Mostrar la mano del jugador
-
-                for (PlayerHandler jugadorIterativo:jugadores){
+                // jugador.Jugador().showHand(); // Mostrar la mano del jugador
+            }
+            for (PlayerHandler jugadorIterativo:jugadores){
                     for (Card carta : jugadorIterativo.Jugador().getMano()) {
                         jugadorIterativo.sendMensajeJugador(carta.toString());
                     }
-                }
-
             }
+
+
 
             // Definir el primer turno
             System.out.println("Turno del jugador: " + jugadores.get(0).Jugador().getNombre());

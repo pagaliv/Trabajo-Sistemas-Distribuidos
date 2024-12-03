@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="poco a poco toma forma rara">
-      <change beforePath="$PROJECT_DIR$/src/main/Jugador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Jugador.java" afterDir="false" />
+    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="mejoras añadidas I">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Juego.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Juego.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Servidor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Servidor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -117,7 +118,7 @@
       <workItem from="1732566964742" duration="597000" />
       <workItem from="1732865617532" duration="1710000" />
       <workItem from="1733168374136" duration="8162000" />
-      <workItem from="1733230409537" duration="325000" />
+      <workItem from="1733230409537" duration="1376000" />
     </task>
     <task id="LOCAL-00001" summary="este trabajo es el grinch de mi vida">
       <created>1733180113540</created>
@@ -140,7 +141,21 @@
       <option name="project" value="LOCAL" />
       <updated>1733182092059</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="mejoras añadidas I">
+      <created>1733230751190</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1733230751190</updated>
+    </task>
+    <task id="LOCAL-00005" summary="mejoras añadidas I">
+      <created>1733230771773</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1733230771773</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,6 +165,18 @@
     <MESSAGE value="este trabajo es el grinch de mi vida" />
     <MESSAGE value="poco a poco toma forma" />
     <MESSAGE value="poco a poco toma forma rara" />
-    <option name="LAST_COMMIT_MESSAGE" value="poco a poco toma forma rara" />
+    <MESSAGE value="mejoras añadidas I" />
+    <option name="LAST_COMMIT_MESSAGE" value="mejoras añadidas I" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/Servidor.java</url>
+          <line>74</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

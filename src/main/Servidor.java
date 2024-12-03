@@ -41,9 +41,13 @@ public class Servidor {
                     // Procesar solicitud en un nuevo hilo
                     PlayerHandler handler = new PlayerHandler(clientSocket,this);
                     threadPool.submit(handler);
+
+                    //
+
                 } catch (IOException e) {
                     System.out.println("Error al aceptar conexión: " + e.getMessage());
                 }
+
             }
 
 
@@ -69,7 +73,7 @@ public class Servidor {
      */
     public void addPlayer(PlayerHandler jugador) {
         synchronized (jugadores) {
-            if (contieneJugador(jugador.Jugador())) {
+            if (!contieneJugador(jugador.Jugador())) {
                 jugadores.add(jugador);
                 System.out.println("Jugador añadido: " + jugador.Jugador().getNombre());
             } if (jugadores.size() == MAX_CLIENTS) {

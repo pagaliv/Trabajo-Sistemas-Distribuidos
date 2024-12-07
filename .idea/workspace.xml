@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="solucionado problema de varios personas con el mismo nombre">
+    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="más problemas solucionados pero nuevos creados">
+      <change afterPath="$PROJECT_DIR$/src/INFO/CODS" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Cliente.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Juego.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Juego.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/PlayerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/PlayerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Servidor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Servidor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,8 +45,8 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.Servidor">
-    <configuration name="Cliente" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Compound.run all">
+    <configuration name="Cliente" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="main.Cliente" />
       <module name="untitled3" />
       <extension name="coverage">
@@ -80,7 +80,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Servidor" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="Servidor" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="main.Servidor" />
       <module name="untitled3" />
       <extension name="coverage">
@@ -93,19 +93,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="run all" type="CompoundRunConfigurationType">
+      <toRun name="Cliente" type="Application" />
+      <toRun name="Cliente2" type="Application" />
+      <toRun name="Cliente3" type="Application" />
+      <toRun name="Cliente4" type="Application" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Application.Cliente2" />
       <item itemvalue="Application.Cliente3" />
       <item itemvalue="Application.Cliente4" />
       <item itemvalue="Application.Cliente" />
       <item itemvalue="Application.Servidor" />
+      <item itemvalue="Compound.run all" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Cliente" />
-        <item itemvalue="Application.Servidor" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -121,7 +123,9 @@
       <workItem from="1732865617532" duration="1710000" />
       <workItem from="1733168374136" duration="8162000" />
       <workItem from="1733230409537" duration="5633000" />
-      <workItem from="1733253913979" duration="5003000" />
+      <workItem from="1733253913979" duration="5882000" />
+      <workItem from="1733435556302" duration="1937000" />
+      <workItem from="1733568528790" duration="16107000" />
     </task>
     <task id="LOCAL-00001" summary="este trabajo es el grinch de mi vida">
       <created>1733180113540</created>
@@ -172,7 +176,14 @@
       <option name="project" value="LOCAL" />
       <updated>1733254582364</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="más problemas solucionados pero nuevos creados">
+      <created>1733266610110</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1733266610110</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -185,6 +196,7 @@
     <MESSAGE value="mejoras añadidas I" />
     <MESSAGE value="Problema de enseñar cartas resuelto" />
     <MESSAGE value="solucionado problema de varios personas con el mismo nombre" />
-    <option name="LAST_COMMIT_MESSAGE" value="solucionado problema de varios personas con el mismo nombre" />
+    <MESSAGE value="más problemas solucionados pero nuevos creados" />
+    <option name="LAST_COMMIT_MESSAGE" value="más problemas solucionados pero nuevos creados" />
   </component>
 </project>

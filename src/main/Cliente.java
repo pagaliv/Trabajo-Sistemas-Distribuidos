@@ -11,6 +11,7 @@ public class Cliente {
     private PrintWriter out;
     private final String host;
     private final int port;
+    private Scanner scanner;
 
     public Cliente(String host, int port) {
         this.host = host;
@@ -23,20 +24,78 @@ public class Cliente {
 
         identificarJugador(); // Fase 1: Identificación
         esperarConfiguracionInicial(); // Fase 2: Configuración inicial
-
         jugar(); // Fase 3: Interacción en el juego
+       // disconnect(); // Fase 4: Desconexión
+    }
+    public boolean conectar() {
+        try {
+            socket = new Socket(host, port);
+            scanner = new Scanner(System.in);
+            System.out.println("Conectado al servidor en " + host + ":" + port);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+            return true;
+        } catch (IOException e) {
+            System.out.println("Error al conectar al servidor: " + e.getMessage());
+            return false;
+        }
+    }
+    public void identificarJugador() {
+        String regex = "^[a-zA-Z0-9]+$";
+        Pattern pattern = Pattern.compile(regex);
+        String nombre = null;
+        boolean nombreCorrecto = false;
 
-        disconnect(); // Fase 4: Desconexión
+        while (!nombreCorrecto) {
+            System.out.println("Escribe tu nombre de jugador:");
+            nombre = scanner.nextLine();
+            if (pattern.matcher(nombre).matches()) {
+                nombreCorrecto = true;
+            } else {
+                System.out.println("Nombre inválido. Usa solo letras y números.");
+            }
+        }
+        sendMessage(nombre);
+        System.out.println("Nombre enviado al servidor.");
+    }
+    public void esperarConfiguracionInicial() {
+        System.out.println("Esperando configuración inicial del juego...");
+        try {
+            // Leer mensajes iniciales (como "Tus cartas son..." o "Turno inicial...")
+            String mensaje;
+            while ((mensaje = in.readLine()) != null) {
+                System.out.println("Servidor: " + mensaje);
+
+                // Si el servidor indica que la configuración está lista, salimos del bucle
+                if (mensaje.contains("Configuración lista")) {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al recibir la configuración inicial: " + e.getMessage());
+        }
     }
     public void jugar() {
         System.out.println("¡El juego ha comenzado!");
-
+        //Leer jugador y si le toca jugar
+        leerVariasLineas();
+        System.out.println("Punto de control");
         try (BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
             String userInput;
             while ((userInput = consoleInput.readLine()) != null) {
+
                 if (userInput.equalsIgnoreCase("salir")) {
                     sendMessage("salir");
                     break;
+                }else if(userInput.equalsIgnoreCase("Mus")){
+                    sendMessage("Mus");
+                    String confirmacion= in.readLine();
+                    if(confirmacion.equalsIgnoreCase("OK")){
+                        System.out.println("Servidor: OK");
+
+                    }else if(confirmacion.equalsIgnoreCase("ERROR")){
+                        System.out.println("Mensaje erroneo");
+                    }
                 }
 
                 // Procesar comandos del jugador (ejemplo: "cortar", "mus", etc.)
@@ -63,57 +122,34 @@ public class Cliente {
     }
 
 
-    public void identificarJugador() {
-        String regex = "^[a-zA-Z0-9]+$";
-        Pattern pattern = Pattern.compile(regex);
 
-        Scanner scanner = new Scanner(System.in);
-        String nombre = null;
-        boolean nombreCorrecto = false;
 
-        while (!nombreCorrecto) {
-            System.out.println("Escribe tu nombre de jugador:");
-            nombre = scanner.nextLine();
-            if (pattern.matcher(nombre).matches()) {
-                nombreCorrecto = true;
-            } else {
-                System.out.println("Nombre inválido. Usa solo letras y números.");
-            }
-        }
+    public void disconnect() {
 
-        sendMessage(nombre);
-        System.out.println("Nombre enviado al servidor.");
-    }
-    public void esperarConfiguracionInicial() {
-        System.out.println("Esperando configuración inicial del juego...");
-        try {
-            // Leer mensajes iniciales (como "Tus cartas son..." o "Turno inicial...")
-            String mensaje;
-            while ((mensaje = in.readLine()) != null) {
-                System.out.println("Servidor: " + mensaje);
-
-                // Si el servidor indica que la configuración está lista, salimos del bucle
-                if (mensaje.contains("Configuración lista")) {
-                    break;
+            if (in != null) {
+                try{
+                    in.close();
+                } catch (IOException e) {
+                   e.printStackTrace();
                 }
             }
-        } catch (IOException e) {
-            System.out.println("Error al recibir la configuración inicial: " + e.getMessage());
-        }
+            if (out != null) {
+                    //No se mete en un try/catch porque el propio out.close tiene dentro del metodo un try/catch
+                    out.close();
+
+            }
+            if (socket != null && !socket.isClosed()) {
+                try{
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            System.out.println("Desconectado del servidor.");
+
     }
 
-    public boolean conectar() {
-        try {
-            socket = new Socket(host, port);
-            System.out.println("Conectado al servidor en " + host + ":" + port);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
-            return true;
-        } catch (IOException e) {
-            System.out.println("Error al conectar al servidor: " + e.getMessage());
-            return false;
-        }
-    }
 
     public void start2() {
         boolean nombreCorrrecto=false;
@@ -169,24 +205,38 @@ public class Cliente {
             System.err.println("El flujo de salida es null. No se puede enviar el mensaje.");
         }
     }
-
-
-    public void disconnect() {
-        try {
-            if (in != null) {
-                in.close();
+    public void leerUnaSolaLinea(){
+        try{
+            if(in !=null){
+                String mensaje = in.readLine();
+                System.out.println("Servidor: " + mensaje);
             }
-            if (out != null) {
-                out.close();
-            }
-            if (socket != null && !socket.isClosed()) {
-                socket.close();
-            }
-            System.out.println("Desconectado del servidor.");
         } catch (IOException e) {
-            System.out.println("Error al cerrar recursos: " + e.getMessage());
+            e.printStackTrace();
         }
+
     }
+    public void leerVariasLineas(){
+        String mensaje;
+        try{
+            while ((mensaje = in.readLine()) != null) {
+                // Si el servidor indica que la configuración está lista, salimos del bucle
+                if (mensaje.contains("COD 23")) {
+                    break;
+                }
+                System.out.println("Servidor: " + mensaje);
+
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+
 
 
     private class ServerListener implements Runnable {

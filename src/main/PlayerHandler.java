@@ -74,15 +74,24 @@ public class PlayerHandler implements Runnable {
 
 
     public void sendMensajeJugador(String msg) {
-        out.println(msg);
+        if(out!=null){
+            out.println(msg );
+            System.out.println("Se envio a " + this.jugador.getNombre() + ": "+ msg);
+        }else {
+            System.out.println("No se pudo enviar a  " + this.jugador.getNombre() + "El mensaje");
+        }
     }
+
     public String recibirLineaJugador() {
         try {
+
             String linea = in.readLine(); // Intentar leer la línea
+
             if (linea == null || linea.isEmpty()) {
                 System.out.println("Se recibió una línea vacía o nula.");
                 return null;
             }
+
             return linea;
         } catch (IOException e) {
             System.err.println("Error al leer mensaje del jugador: " + e.getMessage());

@@ -40,17 +40,38 @@ import java.util.List;
                     }
             }
 
-             mensajeTodosJugadores("Configuración lista");
+            mensajeTodosJugadores("Configuración lista");
 
-            // Definir el primer turno
-           mensajeTodosJugadores("Turno del jugador: " + jugadores.get(0).Jugador().getNombre());
+
+
+
+
+            //Separación por partes
+
+
+
+
             // Aquí  implementar la lógica para manejar los turnos
             while (comprobarGanador()){
+                mensajeTodosJugadores("Turno del jugador: " + jugadores.get(0).Jugador().getNombre());
                 if(cortaroMus()){
                     mensajeTodosJugadores("No ha habido mus");
                 }
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
         // Reparte cartas a los jugadores
         private void repartirCartas() {
             int cartasPorJugador = 4; // Ejemplo: cada jugador recibe 4 cartas
@@ -64,11 +85,22 @@ import java.util.List;
         }
         public boolean cortaroMus(){
             for(int i=0; i<4;i++){
-                jugadores.get(i).sendMensajeJugador("Que desea hacer cortar(0) o Mus(1), escribalo textualmente, sino no surtira efecto");
+                jugadores.get(i).sendMensajeJugador("Que desea hacer cortar o Mus, escribalo textualmente, sino no surtira efecto");
+                jugadores.get(i).sendMensajeJugador("COD 23");
+
                 String msg= jugadores.get(i).recibirLineaJugador();
-                if(msg.equals("0")){
+                if(msg.equals("Mus")){
+                    jugadores.get(i).sendMensajeJugador("OK");
                     return true;
+
+                } else if(msg.equals("Cortar")){
+                    jugadores.get(i).sendMensajeJugador("OK");
+                    return false;
+
+                }else{
+                    jugadores.get(i).sendMensajeJugador("ERROR");
                 }
+
             }
             return false;
         }

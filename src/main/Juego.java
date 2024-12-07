@@ -3,20 +3,25 @@ package main;
 import MD.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
-    public class Juego {
+public class Juego {
         private  List<PlayerHandler> jugadores;
         private  Deck deck;
         private int indiceJugadorActual;
+        private CyclicBarrier cyclicBarrier;
 
-        // Constructor
-        public Juego(List<PlayerHandler> jugadores) {
+
+    // Constructor
+        public Juego(List<PlayerHandler> jugadores, CyclicBarrier c) {
             // Pre: La lista de jugadores no está vacía
             // Post: Inicializa el juego con los jugadores y un mazo de cartas
             this.jugadores = new ArrayList<>(jugadores);
             this.deck = new Deck();
             this.deck.fillBarajaEspanola();
             this.indiceJugadorActual = 0;
+            this.cyclicBarrier=c;
         }
 
         // Método para inicializar el juego
@@ -58,6 +63,12 @@ import java.util.List;
                     mensajeTodosJugadores("No ha habido mus");
                 }
             }
+            try {
+                cyclicBarrier.await();
+            } catch (BrokenBarrierException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
 
 
@@ -91,7 +102,7 @@ import java.util.List;
                 String msg= jugadores.get(i).recibirLineaJugador();
                 if(msg.equals("Mus")){
                     jugadores.get(i).sendMensajeJugador("OK");
-                    return true;
+
 
                 } else if(msg.equals("Cortar")){
                     jugadores.get(i).sendMensajeJugador("OK");
@@ -102,7 +113,7 @@ import java.util.List;
                 }
 
             }
-            return false;
+            return true;
         }
         // Cambia al siguiente turno
         public void pasarTurno() {

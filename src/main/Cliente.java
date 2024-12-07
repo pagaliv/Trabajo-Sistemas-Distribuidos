@@ -92,34 +92,26 @@ public class Cliente {
                     String confirmacion= in.readLine();
                     if(confirmacion.equalsIgnoreCase("OK")){
                         System.out.println("Servidor: OK");
-
+                    }else if(confirmacion.equalsIgnoreCase("ERROR")){
+                        System.out.println("Mensaje erroneo");
+                    }
+                }else if(userInput.equalsIgnoreCase("Cortar")){
+                    sendMessage("Cortar");
+                    String confirmacion= in.readLine();
+                    if(confirmacion.equalsIgnoreCase("OK")){
+                        System.out.println("Servidor: OK");
                     }else if(confirmacion.equalsIgnoreCase("ERROR")){
                         System.out.println("Mensaje erroneo");
                     }
                 }
 
-                // Procesar comandos del jugador (ejemplo: "cortar", "mus", etc.)
-                manejarAccion(userInput);
+
             }
         } catch (IOException e) {
             System.out.println("Error durante el juego: " + e.getMessage());
         }
     }
-    public void manejarAccion(String accion) {
-        switch (accion.toLowerCase()) {
-            case "cortar":
-                sendMessage("cortar");
-                System.out.println("Has decidido cortar.");
-                break;
-            case "mus":
-                sendMessage("mus");
-                System.out.println("Has decidido Mus.");
-                break;
-            default:
-                System.out.println("Acción no válida. Intenta de nuevo.");
-                break;
-        }
-    }
+
 
 
 

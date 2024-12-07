@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 public class PlayerHandler implements Runnable {
     private final Socket socket;
@@ -12,10 +14,12 @@ public class PlayerHandler implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
     private Jugador jugador;
+    private CyclicBarrier cyclicBarrier;
 
-    public PlayerHandler(Socket socket, Servidor servidor) {
+    public PlayerHandler(Socket socket, Servidor servidor, CyclicBarrier c) {
         this.socket = socket;
         this.servidor = servidor;
+        this.cyclicBarrier=c;
     }
     public Jugador Jugador(){
         return this.jugador;
@@ -50,22 +54,16 @@ public class PlayerHandler implements Runnable {
             System.out.println("Jugador conectado: " + jugador.getNombre());// Inicialización de flujos
 
 
-
-            // Escucha de mensajes del cliente
-            String mensaje;
-            while ((mensaje = in.readLine()) != null) {
-                System.out.println("Mensaje recibido de " + jugador.getNombre() + ": " + mensaje);
-
-                if ("salir".equalsIgnoreCase(mensaje)) {
-                    break;
-                }
-
-                // Difundir el mensaje a otros jugadores
-                servidor.broadcastMessage(jugador.getNombre() + ": " + mensaje);
-            }
+            //esperar
+           cyclicBarrier.await();
 
         } catch (IOException e) {
             System.out.println("Se perdió la conexión con el jugador.");
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+           e.printStackTrace();
+        } catch (BrokenBarrierException e) {
+            e.printStackTrace();
         } finally {
             cerrarConexion();
             servidor.removePlayer(jugador);

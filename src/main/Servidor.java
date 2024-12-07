@@ -7,6 +7,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,11 +19,16 @@ public class Servidor {
     private final List<PlayerHandler> jugadores = Collections.synchronizedList(new ArrayList<>());
     static ExecutorService threadPool=null; //lo he hecho estatico porque me lo pedia el compilador, pero no estoy seguro de que tenga que serlo (BORRAR ANTES DE ENTREGAR, SI ERES JAVIER Y LEER ESTO IGNORALO)
     private Juego juego=null;
+    private CyclicBarrier cyclicBarrier;
     private static final int MAX_CLIENTS = 4; // Número máximo de clientes concurrentes
     public static void main(String[] args) {
         // Crear una instancia del servidor y ejecutarla
         Servidor servidor = new Servidor();
         servidor.start();
+    }
+    public Servidor(){
+        cyclicBarrier= new CyclicBarrier(10);
+
     }
     public void start() {
         // Usar try-with-resources para gestionar ServerSocket
@@ -39,7 +45,7 @@ public class Servidor {
                     System.out.println("Cliente conectado desde " + clientSocket.getInetAddress());
 
                     // Procesar solicitud en un nuevo hilo
-                    PlayerHandler handler = new PlayerHandler(clientSocket,this);
+                    PlayerHandler handler = new PlayerHandler(clientSocket,this,cyclicBarrier);
                     threadPool.submit(handler);
 
                     //
@@ -93,7 +99,7 @@ public class Servidor {
 
         // Aquí podrías inicializar la lógica del juego, como asignar cartas, iniciar turnos, etc.
         // Esto podría incluir instanciar un objeto de la clase `Juego` y pasarle la lista de jugadores.
-        juego = new Juego(jugadores);
+        juego = new Juego(jugadores,cyclicBarrier);
         juego.iniciar();
     }
     public boolean contieneJugador(Jugador jugador){

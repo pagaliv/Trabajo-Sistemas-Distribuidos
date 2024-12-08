@@ -119,23 +119,44 @@ public class Juego {
             ph.sendMensajeJugador("COD 23");
         }
         private void apuestas(){
+            int jugadorOrdago=-1;
+            boolean ordago=false;
+            String paloOrdago="";
             mensajeTodosJugadores("hora de apostar");
             for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
-                jugadores.get(i%4).sendMensajeJugador("Apuesta a Grandes");
-                jugadores.get(i%4).sendMensajeJugador("COD 23");
-
-                jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
-                String msg= jugadores.get(i%4).recibirLineaJugador();
-                if(msg.equals("Apostar")){
-                    jugadores.get(i%4).sendMensajeJugador("OK");
-
-                } else if(msg.equals("Pasar")){
-                    jugadores.get(i%4).sendMensajeJugador("OK");
+                if(!ordago){
+                    jugadores.get(i%4).sendMensajeJugador("Apuesta a Grandes");
+                    jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
+                    jugadores.get(i%4).sendMensajeJugador("COD 23");
 
 
-                }else{
-                    jugadores.get(i).sendMensajeJugador("ERROR");
+                    String msg= jugadores.get(i%4).recibirLineaJugador();
+                    if(msg.equals("Apostar")){
+                        jugadores.get(i%4).sendMensajeJugador("OK");
+                        String msg2= jugadores.get(i%4).recibirLineaJugador();
+                        if(Integer.parseInt(msg2)>=(40-jugadores.get(i%4).Jugador().getPuntuacion())){
+                            jugadores.get(i%4).sendMensajeJugador("COD 28");
+                            ordago=true;
+                            jugadorOrdago=i%4;
+                            paloOrdago="Grandes";
+
+
+
+
+                        }
+
+                    } else if(msg.equals("Pasar")){
+                        jugadores.get(i%4).sendMensajeJugador("OK");
+
+
+                    }else{
+                        jugadores.get(i).sendMensajeJugador("ERROR");
+                    }
                 }
+            }
+            if(ordago){
+                 mensajeTodosJugadores("El jugador "+ jugadores.get(jugadorOrdago).Jugador().getNombre() + "ha hecho un ordago a "+ paloOrdago);
+
             }
 
         }

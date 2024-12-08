@@ -76,6 +76,7 @@ public class Cliente {
         }
     }
     public void jugar() {
+        boolean ordago=false;
         System.out.println("¡El juego ha comenzado!");
         //Leer jugador y si le toca jugar
         leerVariasLineas();
@@ -83,6 +84,9 @@ public class Cliente {
         try (BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
             String userInput;
             while ((userInput = consoleInput.readLine()) != null) {
+                if(ordago){
+                    leerUnaSolaLinea();
+                }
 
                 if (userInput.equalsIgnoreCase("salir")) {
                     sendMessage("salir");
@@ -128,10 +132,41 @@ public class Cliente {
                     String confirmacion= in.readLine();
                     if(confirmacion.equalsIgnoreCase("OK")){
                         System.out.println("Servidor: OK");
+                        leerVariasLineas();
+                        String apostarOPasar=consoleInput.readLine();
+                        if(apostarOPasar.equalsIgnoreCase("Apostar")) {
+                            sendMessage("Apostar");
+                            String confir = in.readLine();
+                            if (confirmacion.equalsIgnoreCase("OK")) {
+                                System.out.println("Servidor: OK");
+                                System.out.println("Cuanto desea apostar, minimo tiene que ser 2 y si apuesta más de lo que le queda a tu eqipo para ganar se considerara un ordago");
+                                String apuesta=consoleInput.readLine();
+                                String reglex="^\\d+$";
+                                while (!apuesta.matches(reglex)){
+                                    System.out.println("Servidor:No es una cantidad aceptable,escribe de nuevo, recuerda que  solo se admiten numeros positivos sin espacios");
+                                    apuesta=consoleInput.readLine();
+                                }
+                                sendMessage(apuesta);
+                                String esOrdago=in.readLine();
+                                if(esOrdago.equalsIgnoreCase("COD 28")){
+                                    ordago=true;
+                                    //Es ordago
+
+                                }else if(esOrdago.equalsIgnoreCase("COD 19")){
+                                    //no es ordago
+                                }
+
+                            } else if (confirmacion.equalsIgnoreCase("ERROR")) {
+                                System.out.println("Mensaje erroneo");
+                            }
+                        }
 
                     }else if(confirmacion.equalsIgnoreCase("ERROR")){
                         System.out.println("Mensaje erroneo");
                     }
+                }else if(userInput.equalsIgnoreCase("Aceptar Ordago")){
+
+
                 }
 
 

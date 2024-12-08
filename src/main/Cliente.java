@@ -80,15 +80,14 @@ public class Cliente {
         System.out.println("¡El juego ha comenzado!");
         //Leer jugador y si le toca jugar
         leerVariasLineas();
-        System.out.println("Punto de control");
         try (BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
             String userInput;
-            while ((userInput = consoleInput.readLine()) != null) {
+            while ((userInput = consoleInput.readLine()) != null || ordago) {
                 if(ordago){
-                    leerUnaSolaLinea();
+                    ordago=false;
+                    leerVariasLineas();
                 }
-
-                if (userInput.equalsIgnoreCase("salir")) {
+                else if (userInput.equalsIgnoreCase("salir")) {
                     sendMessage("salir");
                     break;
                 }else if(userInput.equalsIgnoreCase("Mus")){

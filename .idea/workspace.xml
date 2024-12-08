@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="Funciona Mus (El pedir cartas ect) ya">
+    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="Muchos cambios de los que no estoy seguro de muchos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/INFO/CODS" beforeDir="false" afterPath="$PROJECT_DIR$/src/INFO/CODS" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Cliente.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Juego.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Juego.java" afterDir="false" />
     </list>
@@ -125,7 +124,7 @@
       <workItem from="1733253913979" duration="5882000" />
       <workItem from="1733435556302" duration="1937000" />
       <workItem from="1733568528790" duration="27939000" />
-      <workItem from="1733659384469" duration="20226000" />
+      <workItem from="1733659384469" duration="21428000" />
     </task>
     <task id="LOCAL-00001" summary="este trabajo es el grinch de mi vida">
       <created>1733180113540</created>
@@ -225,7 +224,14 @@
       <option name="project" value="LOCAL" />
       <updated>1733678130499</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Muchos cambios de los que no estoy seguro de muchos">
+      <created>1733683036022</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1733683036022</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -242,7 +248,8 @@
     <MESSAGE value="me quiero morir" />
     <MESSAGE value="cambios menores" />
     <MESSAGE value="Funciona Mus (El pedir cartas ect) ya" />
-    <option name="LAST_COMMIT_MESSAGE" value="Funciona Mus (El pedir cartas ect) ya" />
+    <MESSAGE value="Muchos cambios de los que no estoy seguro de muchos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Muchos cambios de los que no estoy seguro de muchos" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

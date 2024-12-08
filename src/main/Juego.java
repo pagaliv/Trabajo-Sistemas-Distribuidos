@@ -131,7 +131,7 @@ public class Juego {
 
 
                     String msg= jugadores.get(i%4).recibirLineaJugador();
-                    if(msg.equals("Apostar")){
+                    if(msg.equalsIgnoreCase("Apostar")){
                         jugadores.get(i%4).sendMensajeJugador("OK");
                         String msg2= jugadores.get(i%4).recibirLineaJugador();
                         if(Integer.parseInt(msg2)>=(40-jugadores.get(i%4).Jugador().getPuntuacion())){
@@ -145,21 +145,38 @@ public class Juego {
 
                         }
 
-                    } else if(msg.equals("Pasar")){
+                    } else if(msg.equalsIgnoreCase("Pasar")){
                         jugadores.get(i%4).sendMensajeJugador("OK");
 
 
                     }else{
-                        jugadores.get(i).sendMensajeJugador("ERROR");
+                        jugadores.get(i%4).sendMensajeJugador("ERROR");
                     }
                 }
             }
             if(ordago){
                  mensajeTodosJugadores("El jugador "+ jugadores.get(jugadorOrdago).Jugador().getNombre() + "ha hecho un ordago a "+ paloOrdago);
+                jugadores.get((jugadorOrdago+1)%4).sendMensajeJugador("Desea 'aceptar ordago' o 'no aceptar' ");
+                jugadores.get((jugadorOrdago+3)%4).sendMensajeJugador("Desea 'aceptar ordago' o 'no aceptar'");
+                mensajeTodosJugadores("COD 23");
+                //De este modo no es eficiente porque tendran que esperar a que ambos jugadores respondan
+                String resp1=jugadores.get((jugadorOrdago+1)%4).recibirLineaJugador();
+                if(resp1.equalsIgnoreCase("aceptar ordago")){
+                    jugadores.get((jugadorOrdago+1)%4).sendMensajeJugador("OK");
 
+
+
+                }else{
+                    jugadores.get((jugadorOrdago+1)%4).sendMensajeJugador("ERROR");
+                    }
             }
+            String resp2=jugadores.get((jugadorOrdago+3)%4).recibirLineaJugador();
+
+
 
         }
+
+
 
 
 

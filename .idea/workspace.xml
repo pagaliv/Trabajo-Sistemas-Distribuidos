@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="más problemas solucionados pero nuevos creados">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Cliente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Juego.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Juego.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Jugador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Jugador.java" afterDir="false" />
-    </list>
+    <list default="true" id="f5eec25d-15cf-4cd2-a538-689f2c17646d" name="Changes" comment="me quiero morir" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -125,7 +120,7 @@
       <workItem from="1733253913979" duration="5882000" />
       <workItem from="1733435556302" duration="1937000" />
       <workItem from="1733568528790" duration="27939000" />
-      <workItem from="1733659384469" duration="5660000" />
+      <workItem from="1733659384469" duration="6436000" />
     </task>
     <task id="LOCAL-00001" summary="este trabajo es el grinch de mi vida">
       <created>1733180113540</created>
@@ -204,7 +199,14 @@
       <option name="project" value="LOCAL" />
       <updated>1733619220304</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="me quiero morir">
+      <created>1733666097196</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1733666097196</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -218,7 +220,8 @@
     <MESSAGE value="Problema de enseñar cartas resuelto" />
     <MESSAGE value="solucionado problema de varios personas con el mismo nombre" />
     <MESSAGE value="más problemas solucionados pero nuevos creados" />
-    <option name="LAST_COMMIT_MESSAGE" value="más problemas solucionados pero nuevos creados" />
+    <MESSAGE value="me quiero morir" />
+    <option name="LAST_COMMIT_MESSAGE" value="me quiero morir" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -10,6 +10,7 @@ public class Deck {
         //Pre:
         //Pos: Make a new Baraja empty;
         this.listaDeCards = new ArrayList<>();
+        this.fillBarajaEspanola();
     }
     public void shuffle(){
         //Pre:

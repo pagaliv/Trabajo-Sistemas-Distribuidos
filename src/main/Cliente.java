@@ -12,6 +12,7 @@ public class Cliente {
     private final String host;
     private final int port;
     private Scanner scanner;
+    private static boolean ordago=false;
 
     public Cliente(String host, int port) {
         this.host = host;
@@ -76,7 +77,7 @@ public class Cliente {
         }
     }
     public void jugar() {
-        boolean ordago=false;
+
         System.out.println("¡El juego ha comenzado!");
         //Leer jugador y si le toca jugar
         leerVariasLineas();
@@ -152,7 +153,7 @@ public class Cliente {
                                     //Es ordago
 
                                 }else if(esOrdago.equalsIgnoreCase("COD 19")){
-                                    //no es ordago
+                                    System.out.println("Apuesta aceptada");
                                 }
 
                             } else if (confirmacion.equalsIgnoreCase("ERROR")) {
@@ -164,6 +165,16 @@ public class Cliente {
                         System.out.println("Mensaje erroneo");
                     }
                 }else if(userInput.equalsIgnoreCase("Aceptar Ordago")){
+                    String conf=in.readLine();
+                    if (conf.equalsIgnoreCase("OK")) {
+                        //El equipo ganador
+                        conf=in.readLine();
+                        System.out.println(conf);
+                        break;
+                    }else{
+                        System.out.println("Mensaje erroneo");
+                    }
+
 
 
                 }

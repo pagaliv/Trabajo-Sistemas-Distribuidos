@@ -25,7 +25,7 @@ public class Servidor {
         servidor.start();
     }
     public Servidor(){
-        cyclicBarrier= new CyclicBarrier(10);
+        cyclicBarrier= new CyclicBarrier(5);
 
     }
     public void start() {

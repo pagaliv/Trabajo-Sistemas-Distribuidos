@@ -26,7 +26,7 @@ public class Cliente {
         identificarJugador(); // Fase 1: Identificación
         esperarConfiguracionInicial(); // Fase 2: Configuración inicial
         jugar(); // Fase 3: Interacción en el juego
-       // disconnect(); // Fase 4: Desconexión
+        disconnect(); // Fase 4: Desconexión
     }
     public boolean conectar() {
         try {
@@ -127,44 +127,77 @@ public class Cliente {
                     }
 
 
-                }else if(userInput.equalsIgnoreCase("Cortar")){
+                }else if(userInput.equalsIgnoreCase("Cortar")) {
                     sendMessage("Cortar");
-                    String confirmacion= in.readLine();
-                    if(confirmacion.equalsIgnoreCase("OK")){
+                    String confirmacion = in.readLine();
+                    if (confirmacion.equalsIgnoreCase("OK")) {
                         System.out.println("Servidor: OK");
                         leerVariasLineas();
-                        String apostarOPasar=consoleInput.readLine();
-                        if(apostarOPasar.equalsIgnoreCase("Apostar")) {
+                        String apostarOPasar = consoleInput.readLine();
+                        if (apostarOPasar.equalsIgnoreCase("Apostar")) {
+                            sendMessage("Apostar");
+                            String confir = in.readLine();
+                            if (confir.equalsIgnoreCase("OK")) {
+                                System.out.println("Servidor: OK");
+                                System.out.println("Cuanto desea apostar, minimo tiene que ser 2 y si apuesta más de lo que le queda a tu eqipo para ganar se considerara un ordago");
+                                String apuesta = consoleInput.readLine();
+                                String reglex = "^\\d+$";
+                                while (!apuesta.matches(reglex)) {
+                                    System.out.println("Servidor:No es una cantidad aceptable,escribe de nuevo, recuerda que  solo se admiten numeros positivos sin espacios");
+                                    apuesta = consoleInput.readLine();
+                                }
+                                sendMessage(apuesta);
+                                String esOrdago = in.readLine();
+                                if (esOrdago.equalsIgnoreCase("COD 28")) {
+                                    ordago = true;
+                                    //Es ordago
+
+                                } else if (esOrdago.equalsIgnoreCase("COD 19")) {
+                                    System.out.println("Apuesta aceptada");
+                                }
+
+                            } else if (confir.equalsIgnoreCase("ERROR")) {
+                                System.out.println("Mensaje erroneo");
+                            }
+                        } else if (apostarOPasar.equalsIgnoreCase("Pasar")) {
                             sendMessage("Apostar");
                             String confir = in.readLine();
                             if (confirmacion.equalsIgnoreCase("OK")) {
                                 System.out.println("Servidor: OK");
-                                System.out.println("Cuanto desea apostar, minimo tiene que ser 2 y si apuesta más de lo que le queda a tu eqipo para ganar se considerara un ordago");
-                                String apuesta=consoleInput.readLine();
-                                String reglex="^\\d+$";
-                                while (!apuesta.matches(reglex)){
-                                    System.out.println("Servidor:No es una cantidad aceptable,escribe de nuevo, recuerda que  solo se admiten numeros positivos sin espacios");
-                                    apuesta=consoleInput.readLine();
-                                }
-                                sendMessage(apuesta);
-                                String esOrdago=in.readLine();
-                                if(esOrdago.equalsIgnoreCase("COD 28")){
-                                    ordago=true;
-                                    //Es ordago
-
-                                }else if(esOrdago.equalsIgnoreCase("COD 19")){
-                                    System.out.println("Apuesta aceptada");
-                                }
-
-                            } else if (confirmacion.equalsIgnoreCase("ERROR")) {
-                                System.out.println("Mensaje erroneo");
                             }
                         }
 
-                    }else if(confirmacion.equalsIgnoreCase("ERROR")){
+                    } else if (confirmacion.equalsIgnoreCase("ERROR")) {
                         System.out.println("Mensaje erroneo");
+
                     }
-                }else if(userInput.equalsIgnoreCase("Aceptar Ordago")){
+                }else if(userInput.equalsIgnoreCase("Apostar")){
+                        sendMessage("Apostar");
+                        String confir = in.readLine();
+                        if (confir.equalsIgnoreCase("OK")) {
+                            System.out.println("Servidor: OK");
+                            System.out.println("Cuanto desea apostar, minimo tiene que ser 2 y si apuesta más de lo que le queda a tu eqipo para ganar se considerara un ordago");
+                            String apuesta=consoleInput.readLine();
+                            String reglex="^\\d+$";
+                            while (!apuesta.matches(reglex)){
+                                System.out.println("Servidor:No es una cantidad aceptable,escribe de nuevo, recuerda que  solo se admiten numeros positivos sin espacios");
+                                apuesta=consoleInput.readLine();
+                            }
+                            sendMessage(apuesta);
+                            String esOrdago=in.readLine();
+                            if(esOrdago.equalsIgnoreCase("COD 28")){
+                                ordago=true;
+                                //Es ordago
+
+                            }else if(esOrdago.equalsIgnoreCase("COD 19")){
+                                System.out.println("Apuesta aceptada");
+                            }
+
+                        } else if (confir.equalsIgnoreCase("ERROR")) {
+                            System.out.println("Mensaje erroneo");
+                        }
+
+                } else if(userInput.equalsIgnoreCase("Aceptar Ordago")){
                     String conf=in.readLine();
                     if (conf.equalsIgnoreCase("OK")) {
                         //El equipo ganador

@@ -95,7 +95,7 @@ public class Cliente {
                     }else if(confirmacion.equalsIgnoreCase("ERROR")){
                         System.out.println("Mensaje erroneo");
                     }
-                    String musOcortar=consoleInput.readLine();
+                    String musOcortar=in.readLine();
                     if(musOcortar.equalsIgnoreCase("No ha habido mus")){
                         String apuesta=consoleInput.readLine();
                         if(apuesta.equalsIgnoreCase("Pasar")) {
@@ -111,12 +111,14 @@ public class Cliente {
                         leerVariasLineas();
                         String relex="^[0-9](,[0-9]){0,3}$";
                         String resp=consoleInput.readLine();
-                        while (resp.matches(relex)){
+                        resp=resp.trim().replaceAll("\r", "").replaceAll("\n", "");
+                        while (!resp.matches(relex)){
                             System.out.println("Mensaje escrito en un mal formato, recuerde el formato, Ejemplo:1,2");
                             System.out.println("Escribe de nuevo el mensaje");
                             resp=consoleInput.readLine();
                         }
                         sendMessage(resp);
+                        leerVariasLineas();
 
                     }
 
@@ -126,6 +128,7 @@ public class Cliente {
                     String confirmacion= in.readLine();
                     if(confirmacion.equalsIgnoreCase("OK")){
                         System.out.println("Servidor: OK");
+
                     }else if(confirmacion.equalsIgnoreCase("ERROR")){
                         System.out.println("Mensaje erroneo");
                     }

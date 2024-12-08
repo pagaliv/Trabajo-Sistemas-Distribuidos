@@ -54,10 +54,11 @@ public class Jugador {
     }
 
     public List<Card> getMano() {
-        return new ArrayList<>(mano);
+        return mano;
     }
     public void setMano(List<Card> l){
-        this.mano=l;
+        List<Card> l2=new ArrayList<>(l);
+        this.mano=l2;
     }
 
     // Métodos para gestionar puntos

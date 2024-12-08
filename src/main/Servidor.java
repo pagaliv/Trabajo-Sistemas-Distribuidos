@@ -1,7 +1,5 @@
 package main;
 
-import main.PlayerHandler;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -100,7 +98,7 @@ public class Servidor {
         // Aquí podrías inicializar la lógica del juego, como asignar cartas, iniciar turnos, etc.
         // Esto podría incluir instanciar un objeto de la clase `Juego` y pasarle la lista de jugadores.
         juego = new Juego(jugadores,cyclicBarrier);
-        juego.iniciar();
+        juego.jugar();
     }
     public boolean contieneJugador(Jugador jugador){
         for(PlayerHandler jugadoresIterados: jugadores){

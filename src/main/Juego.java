@@ -27,7 +27,7 @@ public class Juego {
 
         // Método para inicializar el juego
 
-        public void iniciar() {
+        public void jugar() {
             int ronda;
             System.out.println("La partida ha comenzado.");
             informarCompanyero();
@@ -68,7 +68,7 @@ public class Juego {
                     repartirCartasMus();
                 }
 
-
+            indiceJugadorActual++;
             }
             try {
                 cyclicBarrier.await();
@@ -83,33 +83,37 @@ public class Juego {
                 jugadores.get(i % 4).sendMensajeJugador("Ejemplo: Quiero enviar mi 2ºy 3º cartas, escribire: '2,3'");
                 leerCartasJugador(jugadores.get(i % 4));
                 String numCartasCambio=jugadores.get(i % 4).recibirLineaJugador();
+                //System.out.println(numCartasCambio);
                 String[] parts = numCartasCambio.split(",");
-
+               // System.out.println(Arrays.toString(parts));
                 // Convertir cada número a un entero y almacenarlo en un arreglo
                 int[] numbers = Arrays.stream(parts)
                         .mapToInt(Integer::parseInt)
                         .toArray();
+               // System.out.println(Arrays.toString(numbers));
                 List<Card> cartas= jugadores.get(i % 4).Jugador().getMano();
-                for(int j=0;j<=numbers.length;j++){
-                    if(!(deck.getNumeroCartas()<=0)){
-                        cartas.set(numbers[j],deck.deleteCardInPosition(0));
-                    }else{
-                        deck=new Deck();
-                        for (PlayerHandler player:jugadores){
-                            for(Card cartaParaEliminar:player.Jugador().getMano()){
+                for (int number : numbers) {
+                    if (!(deck.getNumeroCartas() <= 0)) {
+                        cartas.set(number, deck.deleteCardInPosition(0));
+                    } else {
+                        deck = new Deck();
+                        for (PlayerHandler player : jugadores) {
+                            for (Card cartaParaEliminar : player.Jugador().getMano()) {
                                 deck.deleteCard(cartaParaEliminar);
                             }
                         }
-                        cartas.set(numbers[j],deck.deleteCardInPosition(0));
+                        cartas.set(number, deck.deleteCardInPosition(0));
                     }
 
-
-
                 }
+
+
+
+                leerCartasJugador(jugadores.get(i % 4));
             }
         }
         private void leerCartasJugador(PlayerHandler ph){
-            for(int i=1;i<=4;i++){
+            for(int i=0;i<4;i++){
                ph.sendMensajeJugador(i+". " + ph.Jugador().getMano().get(i).toString());
             }
             ph.sendMensajeJugador("COD 23");
@@ -118,6 +122,8 @@ public class Juego {
             mensajeTodosJugadores("hora de apostar");
             for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
                 jugadores.get(i%4).sendMensajeJugador("Apuesta a Grandes");
+                jugadores.get(i%4).sendMensajeJugador("COD 23");
+
                 jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
                 String msg= jugadores.get(i%4).recibirLineaJugador();
                 if(msg.equals("Apostar")){

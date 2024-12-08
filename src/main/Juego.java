@@ -59,7 +59,7 @@ public class Juego {
             // Aquí  implementar la lógica para manejar los turnos
             while (comprobarGanador()){
                 mensajeTodosJugadores("Turno del jugador: " + jugadores.get(0).Jugador().getNombre());
-                if(cortaroMus()){
+                if(!cortaroMus()){
                     mensajeTodosJugadores("No ha habido mus");
                 }
             }
@@ -70,16 +70,15 @@ public class Juego {
             }
 
         }
+        private void apuestas(){
+            mensajeTodosJugadores("hora de apostar");
+            for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
+                jugadores.get(i%4).sendMensajeJugador("Apuesta a Grandes");
+                jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
+                jugadores.get(i%4).sendMensajeJugador("COD 23");
+            }
 
-
-
-
-
-
-
-
-
-
+        }
 
 
 
@@ -95,17 +94,17 @@ public class Juego {
             }
         }
         public boolean cortaroMus(){
-            for(int i=0; i<4;i++){
-                jugadores.get(i).sendMensajeJugador("Que desea hacer cortar o Mus, escribalo textualmente, sino no surtira efecto");
-                jugadores.get(i).sendMensajeJugador("COD 23");
+            for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
+                jugadores.get(i%4).sendMensajeJugador("Que desea hacer cortar o Mus, escribalo textualmente, sino no surtira efecto");
+                jugadores.get(i%4).sendMensajeJugador("COD 23");
 
-                String msg= jugadores.get(i).recibirLineaJugador();
+                String msg= jugadores.get(i%4).recibirLineaJugador();
                 if(msg.equals("Mus")){
-                    jugadores.get(i).sendMensajeJugador("OK");
+                    jugadores.get(i%4).sendMensajeJugador("OK");
 
 
                 } else if(msg.equals("Cortar")){
-                    jugadores.get(i).sendMensajeJugador("OK");
+                    jugadores.get(i%4).sendMensajeJugador("OK");
                     return false;
 
                 }else{

@@ -95,6 +95,19 @@ public class Cliente {
                     }else if(confirmacion.equalsIgnoreCase("ERROR")){
                         System.out.println("Mensaje erroneo");
                     }
+                    leerVariasLineas();
+                    String apuesta=consoleInput.readLine();
+                    if(apuesta.equalsIgnoreCase("Pasar")) {
+                        sendMessage("Pasar");
+                        String confirmacion = in.readLine();
+                        if (confirmacion.equalsIgnoreCase("OK")) {
+                            System.out.println("Servidor: OK");
+                        } else if (confirmacion.equalsIgnoreCase("ERROR")) {
+                            System.out.println("Mensaje erroneo");
+                        }
+                    }
+
+
                 }else if(userInput.equalsIgnoreCase("Cortar")){
                     sendMessage("Cortar");
                     String confirmacion= in.readLine();

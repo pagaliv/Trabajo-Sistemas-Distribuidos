@@ -8,8 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Cliente.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/Juego.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Juego.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/PlayerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/PlayerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Servidor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Servidor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Jugador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Jugador.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +124,8 @@
       <workItem from="1733230409537" duration="5633000" />
       <workItem from="1733253913979" duration="5882000" />
       <workItem from="1733435556302" duration="1937000" />
-      <workItem from="1733568528790" duration="24590000" />
+      <workItem from="1733568528790" duration="27939000" />
+      <workItem from="1733659384469" duration="5660000" />
     </task>
     <task id="LOCAL-00001" summary="este trabajo es el grinch de mi vida">
       <created>1733180113540</created>
@@ -190,7 +190,21 @@
       <option name="project" value="LOCAL" />
       <updated>1733593567689</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="más problemas solucionados pero nuevos creados">
+      <created>1733615068484</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1733615068484</updated>
+    </task>
+    <task id="LOCAL-00011" summary="más problemas solucionados pero nuevos creados">
+      <created>1733619220304</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1733619220304</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -205,5 +219,36 @@
     <MESSAGE value="solucionado problema de varios personas con el mismo nombre" />
     <MESSAGE value="más problemas solucionados pero nuevos creados" />
     <option name="LAST_COMMIT_MESSAGE" value="más problemas solucionados pero nuevos creados" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/Cliente.java</url>
+          <line>123</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/Cliente.java</url>
+          <line>125</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/Cliente.java</url>
+          <line>124</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/Cliente.java</url>
+          <line>127</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/Cliente.java</url>
+          <line>126</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

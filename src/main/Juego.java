@@ -2,6 +2,7 @@ package main;
 
 import MD.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
@@ -61,7 +62,13 @@ public class Juego {
                 mensajeTodosJugadores("Turno del jugador: " + jugadores.get(0).Jugador().getNombre());
                 if(!cortaroMus()){
                     mensajeTodosJugadores("No ha habido mus");
+                    apuestas();
+                }else{
+                    mensajeTodosJugadores("Habra mus");
+                    repartirCartasMus();
                 }
+
+
             }
             try {
                 cyclicBarrier.await();
@@ -70,12 +77,59 @@ public class Juego {
             }
 
         }
+        private void repartirCartasMus() {
+            for (int i = indiceJugadorActual; i < indiceJugadorActual + 4; i++) {
+                jugadores.get(i % 4).sendMensajeJugador("Que cartas desea eliminar, envia su numero por posición, si son varias envialas separadas por comas");
+                jugadores.get(i % 4).sendMensajeJugador("Ejemplo: Quiero enviar mi 2ºy 3º cartas, escribire: '2,3'");
+                leerCartasJugador(jugadores.get(i % 4));
+                String numCartasCambio=jugadores.get(i % 4).recibirLineaJugador();
+                String[] parts = numCartasCambio.split(",");
+
+                // Convertir cada número a un entero y almacenarlo en un arreglo
+                int[] numbers = Arrays.stream(parts)
+                        .mapToInt(Integer::parseInt)
+                        .toArray();
+                List<Card> cartas= jugadores.get(i % 4).Jugador().getMano();
+                for(int j=0;j<=numbers.length;j++){
+                    if(!(deck.getNumeroCartas()<=0)){
+                        cartas.set(numbers[j],deck.deleteCardInPosition(0));
+                    }else{
+                        deck=new Deck();
+                        for (PlayerHandler player:jugadores){
+                            for(Card cartaParaEliminar:player.Jugador().getMano()){
+                                deck.deleteCard(cartaParaEliminar);
+                            }
+                        }
+                        cartas.set(numbers[j],deck.deleteCardInPosition(0));
+                    }
+
+
+
+                }
+            }
+        }
+        private void leerCartasJugador(PlayerHandler ph){
+            for(int i=1;i<=4;i++){
+               ph.sendMensajeJugador(i+". " + ph.Jugador().getMano().get(i).toString());
+            }
+            ph.sendMensajeJugador("COD 23");
+        }
         private void apuestas(){
             mensajeTodosJugadores("hora de apostar");
             for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
                 jugadores.get(i%4).sendMensajeJugador("Apuesta a Grandes");
                 jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
-                jugadores.get(i%4).sendMensajeJugador("COD 23");
+                String msg= jugadores.get(i%4).recibirLineaJugador();
+                if(msg.equals("Apostar")){
+                    jugadores.get(i%4).sendMensajeJugador("OK");
+
+                } else if(msg.equals("Pasar")){
+                    jugadores.get(i%4).sendMensajeJugador("OK");
+
+
+                }else{
+                    jugadores.get(i).sendMensajeJugador("ERROR");
+                }
             }
 
         }
@@ -88,6 +142,14 @@ public class Juego {
             for (int i = 0; i < cartasPorJugador; i++) {
                 for (PlayerHandler jugador : jugadores) {
                     if (deck.getNumeroCartas() > 0) {
+                        jugador.Jugador().addCard(deck.deleteCardInPosition(0));
+                    }else{
+                        deck=new Deck();
+                        for (PlayerHandler player:jugadores){
+                            for(Card cartaParaEliminar:player.Jugador().getMano()){
+                                deck.deleteCard(cartaParaEliminar);
+                            }
+                        }
                         jugador.Jugador().addCard(deck.deleteCardInPosition(0));
                     }
                 }

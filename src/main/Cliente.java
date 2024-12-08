@@ -95,16 +95,29 @@ public class Cliente {
                     }else if(confirmacion.equalsIgnoreCase("ERROR")){
                         System.out.println("Mensaje erroneo");
                     }
-                    leerVariasLineas();
-                    String apuesta=consoleInput.readLine();
-                    if(apuesta.equalsIgnoreCase("Pasar")) {
-                        sendMessage("Pasar");
-                        String confirmacion = in.readLine();
-                        if (confirmacion.equalsIgnoreCase("OK")) {
-                            System.out.println("Servidor: OK");
-                        } else if (confirmacion.equalsIgnoreCase("ERROR")) {
-                            System.out.println("Mensaje erroneo");
+                    String musOcortar=consoleInput.readLine();
+                    if(musOcortar.equalsIgnoreCase("No ha habido mus")){
+                        String apuesta=consoleInput.readLine();
+                        if(apuesta.equalsIgnoreCase("Pasar")) {
+                            sendMessage("Pasar");
+                            String confir = in.readLine();
+                            if (confirmacion.equalsIgnoreCase("OK")) {
+                                System.out.println("Servidor: OK");
+                            } else if (confirmacion.equalsIgnoreCase("ERROR")) {
+                                System.out.println("Mensaje erroneo");
+                            }
                         }
+                    } else if (musOcortar.equalsIgnoreCase("Habra mus")) {
+                        leerVariasLineas();
+                        String relex="^[0-9](,[0-9]){0,3}$";
+                        String resp=consoleInput.readLine();
+                        while (resp.matches(relex)){
+                            System.out.println("Mensaje escrito en un mal formato, recuerde el formato, Ejemplo:1,2");
+                            System.out.println("Escribe de nuevo el mensaje");
+                            resp=consoleInput.readLine();
+                        }
+                        sendMessage(resp);
+
                     }
 
 

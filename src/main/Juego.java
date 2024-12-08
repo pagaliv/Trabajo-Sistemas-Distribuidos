@@ -286,59 +286,63 @@ public class Juego {
                 jugadores.get(m).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
                 jugadores.get((m + 2) % 4).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
             }
-            for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
-                if(!ordago){
-                    jugadores.get(i%4).sendMensajeJugador("Apuesta al punto, minimo tienes que apostar 3, tu apuesta se sumara a la más grande de tus adversarios si la han hecho");
-                    jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
-                    apuestasEquipoContrario(i,apuestaPunto);
-                    jugadores.get(i%4).sendMensajeJugador("COD 23");
+            if(!apostadoenJuego){
+                for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
+                    if(!ordago){
+                        jugadores.get(i%4).sendMensajeJugador("Apuesta al punto, minimo tienes que apostar 3, tu apuesta se sumara a la más grande de tus adversarios si la han hecho");
+                        jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
+                        apuestasEquipoContrario(i,apuestaPunto);
+                        jugadores.get(i%4).sendMensajeJugador("COD 23");
 
 
-                    String msg= jugadores.get(i%4).recibirLineaJugador();
-                    if(msg.equalsIgnoreCase("Apostar")){
-                        jugadores.get(i%4).sendMensajeJugador("OK");
-                        //Cuanto va a apostar
-                        String msg2= jugadores.get(i%4).recibirLineaJugador();
-                        if(Integer.parseInt(msg2)>=(40-jugadores.get(i%4).Jugador().getPuntuacion())){
-                            jugadores.get(i%4).sendMensajeJugador("COD 28");
-                            ordago=true;
-                            jugadorOrdago=i%4;
-                            paloOrdago="Juego";
+                        String msg= jugadores.get(i%4).recibirLineaJugador();
+                        if(msg.equalsIgnoreCase("Apostar")){
+                            jugadores.get(i%4).sendMensajeJugador("OK");
+                            //Cuanto va a apostar
+                            String msg2= jugadores.get(i%4).recibirLineaJugador();
+                            if(Integer.parseInt(msg2)>=(40-jugadores.get(i%4).Jugador().getPuntuacion())){
+                                jugadores.get(i%4).sendMensajeJugador("COD 28");
+                                ordago=true;
+                                jugadorOrdago=i%4;
+                                paloOrdago="Juego";
+                            }else{
+                                jugadores.get(i%4).sendMensajeJugador("COD 19");
+                                apuestaJuego[i%4]=Integer.parseInt(msg2)+CantidadapuestasEquipoContrario(i,apuestapequenyas);
+
+                            }
+
+                        } else if(msg.equalsIgnoreCase("Pasar")){
+                            jugadores.get(i%4).sendMensajeJugador("OK");
+
+
                         }else{
-                            jugadores.get(i%4).sendMensajeJugador("COD 19");
-                            apuestaJuego[i%4]=Integer.parseInt(msg2)+CantidadapuestasEquipoContrario(i,apuestapequenyas);
-
+                            jugadores.get(i%4).sendMensajeJugador("ERROR");
                         }
-
-                    } else if(msg.equalsIgnoreCase("Pasar")){
-                        jugadores.get(i%4).sendMensajeJugador("OK");
-
-
-                    }else{
-                        jugadores.get(i%4).sendMensajeJugador("ERROR");
                     }
                 }
-            }
-            if(!ordago){
-                int m=posicionJugadorConCartasMasGrandes(jugadores);
-                jugadores.get(m).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
-                jugadores.get((m + 2) % 4).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
+                if(!ordago){
+                    int m=posicionJugadorConCartasMasGrandes(jugadores);
+                    jugadores.get(m).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
+                    jugadores.get((m + 2) % 4).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
+                }
             }
 
 
-            if(ordago){
-                 mensajeTodosJugadores("El jugador "+ jugadores.get(jugadorOrdago).Jugador().getNombre() + "ha hecho un ordago a "+ paloOrdago);
-                jugadores.get((jugadorOrdago+1)%4).sendMensajeJugador("Desea 'aceptar ordago' o 'no aceptar' ");
-                jugadores.get((jugadorOrdago+3)%4).sendMensajeJugador("Desea 'aceptar ordago' o 'no aceptar'");
+
+            if(ordago) {
+                mensajeTodosJugadores("El jugador " + jugadores.get(jugadorOrdago).Jugador().getNombre() + "ha hecho un ordago a " + paloOrdago);
+                jugadores.get((jugadorOrdago + 1) % 4).sendMensajeJugador("Desea 'aceptar ordago' o 'no aceptar' ");
+                jugadores.get((jugadorOrdago + 3) % 4).sendMensajeJugador("Desea 'aceptar ordago' o 'no aceptar'");
                 mensajeTodosJugadores("COD 23");
                 //De este modo no es eficiente porque tendran que esperar a que ambos jugadores respondan
-                String resp1=jugadores.get((jugadorOrdago+1)%4).recibirLineaJugador();
-                if(resp1.equalsIgnoreCase("aceptar ordago")) {
+                String resp1 = jugadores.get((jugadorOrdago + 1) % 4).recibirLineaJugador();
+                String resp2 = jugadores.get((jugadorOrdago + 3) % 4).recibirLineaJugador();
+                if (resp1.equalsIgnoreCase("aceptar ordago")) {
                     int ganador;
                     jugadores.get((jugadorOrdago + 1) % 4).sendMensajeJugador("OK");
                     switch (paloOrdago) {
                         case "Grandes" -> {
-                             ganador = posicionJugadorConCartasMasGrandes(jugadores);
+                            ganador = posicionJugadorConCartasMasGrandes(jugadores);
                             jugadores.get(ganador).Jugador().sumarPuntos(40);
                             jugadores.get((ganador + 2) % 4).Jugador().sumarPuntos(40);
                         }
@@ -348,7 +352,7 @@ public class Juego {
                             jugadores.get((ganador + 2) % 4).Jugador().sumarPuntos(40);
                         }
                         case "Pares" -> {
-                             ganador = posicionJugadorConMejorPar(jugadores);
+                            ganador = posicionJugadorConMejorPar(jugadores);
                             jugadores.get(ganador).Jugador().sumarPuntos(40);
                             jugadores.get((ganador + 2) % 4).Jugador().sumarPuntos(40);
                         }
@@ -366,15 +370,52 @@ public class Juego {
                     }
                     mensajeTodosJugadores("Ha ganado el equipo de: " + jugadores.get(ganador).Jugador().getNombre() + " y " + jugadores.get(ganador).Jugador().getNombre());
 
+
+                } else {
+                    jugadores.get((jugadorOrdago + 1) % 4).sendMensajeJugador("ERROR");
                 }
+                if (resp2.equalsIgnoreCase("aceptar ordago")) {
+                    int ganador;
+                    jugadores.get((jugadorOrdago + 3) % 4).sendMensajeJugador("OK");
+                    switch (paloOrdago) {
+                        case "Grandes" -> {
+                            ganador = posicionJugadorConCartasMasGrandes(jugadores);
+                            jugadores.get(ganador).Jugador().sumarPuntos(40);
+                            jugadores.get((ganador + 2) % 4).Jugador().sumarPuntos(40);
+                        }
+                        case "Pequenyas" -> {
+                            ganador = posicionJugadorConCartasMasPequenas(jugadores);
+                            jugadores.get(ganador).Jugador().sumarPuntos(40);
+                            jugadores.get((ganador + 2) % 4).Jugador().sumarPuntos(40);
+                        }
+                        case "Pares" -> {
+                            ganador = posicionJugadorConMejorPar(jugadores);
+                            jugadores.get(ganador).Jugador().sumarPuntos(40);
+                            jugadores.get((ganador + 2) % 4).Jugador().sumarPuntos(40);
+                        }
+                        case "Juego" -> {
+                            ganador = posicionJugadorConMejorJuego(jugadores);
+                            jugadores.get(ganador).Jugador().sumarPuntos(40);
+                            jugadores.get((ganador + 2) % 4).Jugador().sumarPuntos(40);
+                        }
+                        default -> {
+                            ganador = posicionJugadorMasCercaDe30(jugadores);
+                            jugadores.get(ganador).Jugador().sumarPuntos(40);
+                            jugadores.get((ganador + 2) % 4).Jugador().sumarPuntos(40);
 
-
-                }else{
-                    jugadores.get((jugadorOrdago+1)%4).sendMensajeJugador("ERROR");
+                        }
                     }
+                    mensajeTodosJugadores("Ha ganado el equipo de: " + jugadores.get(ganador).Jugador().getNombre() + " y " + jugadores.get(ganador).Jugador().getNombre());
 
 
-            String resp2=jugadores.get((jugadorOrdago+3)%4).recibirLineaJugador();
+                } else {
+                    jugadores.get((jugadorOrdago + 3) % 4).sendMensajeJugador("ERROR");
+                }
+            }
+
+
+
+
 
 
 

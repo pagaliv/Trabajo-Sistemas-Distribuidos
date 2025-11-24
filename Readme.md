@@ -18,9 +18,9 @@ Carpeta `src/main` (lógica de red y juego):
 - `main.Jugador` — Modelo del jugador (nombre, mano, puntuación). Contiene un pequeño `main` que delega a `main.Cliente` para permitir ejecutar `java -cp out main.Jugador` como cliente.
 - `main.PlayerHandler` — Handler por conexión: mantiene los flujos (in/out), lee líneas del cliente y expone `sendMensajeJugador(...)` y `recibirLineaJugador()` para que `Juego` interactúe con el jugador.
 - `main.Juego` — Lógica de la partida (reparto, turnos, mus, apuestas, comparación de manos). Actualmente está en desarrollo: implementa ciclos de turno, reparto básico y una versión inicial del flujo de apuestas.
-- `main.Main` — (si existe) contenedor / launcher auxiliar (el servidor principal usa `Servidor.main`).
 
 Carpeta `src/MD` (modelo de cartas / utilidades):
+Se uso como referencia para hacer la baraja, la clase creada en programación IV. 
 
 - `MD.Card` — Representa una carta (palo, número y representación de cadena).
 - `MD.Deck` — Mazo: construcción de la baraja española, extracción y eliminación de cartas.

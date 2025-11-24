@@ -85,10 +85,18 @@ public class PlayerHandler implements Runnable {
 
             String linea = in.readLine(); // Intentar leer la línea
 
-            if (linea == null || linea.isEmpty()) {
-                System.out.println("Se recibió una línea vacía o nula.");
+            if (linea == null) {
+                System.out.println("Se recibió una línea nula (jugador desconectado?): " + (jugador != null ? jugador.getNombre() : "<unknown>"));
                 return null;
             }
+
+            if (linea.isEmpty()) {
+                System.out.println("Se recibió una línea vacía de " + (jugador != null ? jugador.getNombre() : "<unknown>") + ". Ignorando.");
+                return ""; // devolver cadena vacía para que el llamador pueda distinguir
+            }
+
+            // Log de depuración: mostrar lo que recibió el servidor de este jugador
+            System.out.println("Recibido de " + (jugador != null ? jugador.getNombre() : "<unknown>") + ": '" + linea + "'");
 
             return linea;
         } catch (IOException e) {

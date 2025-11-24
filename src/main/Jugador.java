@@ -124,5 +124,30 @@ public class Jugador {
         return this.nombre.equals(other.nombre);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (o instanceof Jugador) {
+            Jugador other = (Jugador) o;
+            return Objects.equals(this.nombre, other.nombre);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre);
+    }
+
+    // Convenience main so this model class can be executed as a client.
+    // This delegates to the existing Cliente implementation so you can run:
+    //   java -cp out main.Jugador
+    // and it will behave the same as running main.Cliente.
+    public static void main(String[] args) {
+        // Delegate to Cliente. If args are empty, Cliente will prompt for name.
+        main.Cliente.main(args);
+    }
+
 }
 

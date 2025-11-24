@@ -13,10 +13,11 @@ public class Servidor {
 
     private ServerSocket serverSocket;
 
-    private static final int PORT = 12345;
+    private static final int PORT = 12346;
     private final List<PlayerHandler> jugadores = Collections.synchronizedList(new ArrayList<>());
-    static ExecutorService threadPool=null; //lo he hecho estatico porque me lo pedia el compilador, pero no estoy seguro de que tenga que serlo (BORRAR ANTES DE ENTREGAR, SI ERES JAVIER Y LEER ESTO IGNORALO)
-    private Juego juego=null;
+    // Pool de hilos para manejar clientes (instancia, no estático)
+    private ExecutorService threadPool = null;
+    private Juego juego = null;
     private CyclicBarrier cyclicBarrier;
     private static final int MAX_CLIENTS = 4; // Número máximo de clientes concurrentes
     public static void main(String[] args) {
@@ -29,14 +30,16 @@ public class Servidor {
 
     }
     public void start() {
+        // Inicializar threadPool antes de intentar abrir el socket para poder cerrarlo en finally
+        threadPool = Executors.newFixedThreadPool(MAX_CLIENTS);
+
         // Usar try-with-resources para gestionar ServerSocket
         try (ServerSocket serverSocket = new ServerSocket(PORT)) { //Crea el socket del servidor
+            // Guardamos el serverSocket en el campo de instancia por si necesitamos cerrarlo luego
+            this.serverSocket = serverSocket;
             System.out.println("Servidor iniciado en el puerto " + PORT); //Dice el puerto en el que se crea el server
 
-            // Usar un pool de hilos para manejar múltiples clientes
-            threadPool = Executors.newFixedThreadPool(MAX_CLIENTS); //Crea una pool de hilos que usara a posteriori
-
-            while (!Thread.interrupted()) {
+            while (!Thread.currentThread().isInterrupted()) {
                 try {
                     // Aceptar nueva conexión
                     Socket clientSocket = serverSocket.accept();
@@ -50,17 +53,19 @@ public class Servidor {
 
                 } catch (IOException e) {
                     System.out.println("Error al aceptar conexión: " + e.getMessage());
+                    // Si el serverSocket está cerrado, salimos del bucle
+                    if (serverSocket.isClosed()) break;
                 }
 
             }
 
-
-
         } catch (IOException e) {
             System.out.println("Error en el servidor: " + e.getMessage());
-        }finally {
-            // Apagar el pool de hilos al cerrar el servidor
-            threadPool.shutdown();
+        } finally {
+            // Apagar el pool de hilos al cerrar el servidor (si fue inicializado)
+            if (threadPool != null) {
+                threadPool.shutdown();
+            }
             stopServer();
         }
     }
@@ -77,12 +82,16 @@ public class Servidor {
      */
     public void addPlayer(PlayerHandler jugador) {
         synchronized (jugadores) {
-            if(contieneJugador(jugador.Jugador())){
+            if (contieneJugador(jugador.Jugador())) {
+                // Ya existe un jugador con ese nombre, desconectamos la nueva conexión
                 jugador.desconectarJugador();
-            } else if(!contieneJugador(jugador.Jugador())) {
-                jugadores.add(jugador);
-                System.out.println("Jugador añadido: " + jugador.Jugador().getNombre());
-            } if (jugadores.size() == MAX_CLIENTS) {
+                return;
+            }
+
+            jugadores.add(jugador);
+            System.out.println("Jugador añadido: " + jugador.Jugador().getNombre());
+
+            if (jugadores.size() == MAX_CLIENTS) {
                 startGame();
             }
         }
@@ -132,7 +141,16 @@ public class Servidor {
      */
     public void removePlayer(Jugador jugador) {
         synchronized (jugadores) {
-            if (jugadores.remove(jugador)) {
+            PlayerHandler encontrado = null;
+            for (PlayerHandler ph : jugadores) {
+                Jugador j = ph.Jugador();
+                if (j != null && j.equals(jugador)) {
+                    encontrado = ph;
+                    break;
+                }
+            }
+            if (encontrado != null) {
+                jugadores.remove(encontrado);
                 System.out.println("Jugador eliminado: " + jugador.getNombre());
             }
         }

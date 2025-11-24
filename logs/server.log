@@ -1,0 +1,68 @@
+Servidor iniciado en el puerto 12346
+Cliente conectado desde /127.0.0.1
+Cliente conectado desde /127.0.0.1
+Cliente conectado desde /127.0.0.1
+Cliente conectado desde /127.0.0.1
+Jugador añadido: Bob
+Jugador conectado: Bob
+Jugador añadido: Carol
+Jugador conectado: Carol
+Jugador añadido: Alice
+Jugador conectado: Alice
+Jugador añadido: Dave
+¡Todos los jugadores están conectados! Iniciando la partida...
+La partida ha comenzado.
+Se envio a Bob: Estas son tus cartas
+Se envio a Carol: Estas son tus cartas
+Se envio a Alice: Estas son tus cartas
+Se envio a Dave: Estas son tus cartas
+Bob ha recibido la carta: [2 de copas] 
+Bob ha recibido la carta: [Rey de copas] 
+Bob ha recibido la carta: [4 de copas] 
+Bob ha recibido la carta: [Caballo de espadas] 
+Carol ha recibido la carta: [Caballo de bastos] 
+Carol ha recibido la carta: [1 de bastos] 
+Carol ha recibido la carta: [1 de espadas] 
+Carol ha recibido la carta: [6 de bastos] 
+Alice ha recibido la carta: [5 de oros] 
+Alice ha recibido la carta: [4 de bastos] 
+Alice ha recibido la carta: [6 de copas] 
+Alice ha recibido la carta: [5 de espadas] 
+Dave ha recibido la carta: [Sota de bastos] 
+Dave ha recibido la carta: [7 de espadas] 
+Dave ha recibido la carta: [2 de espadas] 
+Dave ha recibido la carta: [3 de espadas] 
+Se envio a Bob: [2 de copas] 
+Se envio a Bob: [Rey de copas] 
+Se envio a Bob: [4 de copas] 
+Se envio a Bob: [Caballo de espadas] 
+Se envio a Carol: [Caballo de bastos] 
+Se envio a Carol: [1 de bastos] 
+Se envio a Carol: [1 de espadas] 
+Se envio a Carol: [6 de bastos] 
+Se envio a Alice: [5 de oros] 
+Se envio a Alice: [4 de bastos] 
+Se envio a Alice: [6 de copas] 
+Se envio a Alice: [5 de espadas] 
+Se envio a Dave: [Sota de bastos] 
+Se envio a Dave: [7 de espadas] 
+Se envio a Dave: [2 de espadas] 
+Se envio a Dave: [3 de espadas] 
+Se envio a Bob: Configuración lista
+Se envio a Carol: Configuración lista
+Se envio a Alice: Configuración lista
+Se envio a Dave: Configuración lista
+Se envio a Bob: Turno del jugador: Bob
+Se envio a Carol: Turno del jugador: Bob
+Se envio a Alice: Turno del jugador: Bob
+Se envio a Dave: Turno del jugador: Bob
+Se envio a Bob: Que desea hacer cortar o Mus, escribalo textualmente, sino no surtira efecto
+Se envio a Bob: COD 23
+Cliente conectado desde /127.0.0.1
+Cliente conectado desde /127.0.0.1
+Cliente conectado desde /127.0.0.1
+Cliente conectado desde /127.0.0.1
+Cliente conectado desde /127.0.0.1
+Cliente conectado desde /127.0.0.1
+Cliente conectado desde /127.0.0.1
+Cliente conectado desde /127.0.0.1

@@ -1,0 +1,15 @@
+Conectado al servidor en localhost:12346
+Escribe tu nombre de jugador:
+Servidor: ¡Bienvenido al servidor de Mus!
+Nombre enviado al servidor.
+Esperando configuración inicial del juego...
+Servidor: La partida está comenzando...
+Servidor: Estas son tus cartas
+Servidor: [5 de oros] 
+Servidor: Tu compañero es Bob
+Servidor: [4 de bastos] 
+Servidor: [6 de copas] 
+Servidor: [5 de espadas] 
+Servidor: Configuración lista
+¡El juego ha comenzado!
+Servidor: Turno del jugador: Bob

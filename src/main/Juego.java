@@ -59,7 +59,14 @@ public class Juego {
 
             // Aquí  implementar la lógica para manejar los turnos
             while (comprobarGanador()){
-                mensajeTodosJugadores("Turno del jugador: " + jugadores.get(0).Jugador().getNombre());
+                // Notificar solo al jugador activo y avisar a los demás que esperen
+                PlayerHandler activo = jugadores.get(indiceJugadorActual % jugadores.size());
+                activo.sendMensajeJugador("Es tu turno: " + activo.Jugador().getNombre());
+                for (PlayerHandler p : jugadores) {
+                    if (p != activo) {
+                        p.sendMensajeJugador("Espera tu turno; jugador actual: " + activo.Jugador().getNombre());
+                    }
+                }
                 if(!cortaroMus()){
                     mensajeTodosJugadores("No ha habido mus");
                     apuestas();
@@ -446,20 +453,28 @@ public class Juego {
         }
         public boolean cortaroMus(){
             for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
-                jugadores.get(i%4).sendMensajeJugador("Que desea hacer cortar o Mus, escribalo textualmente, sino no surtira efecto");
-                jugadores.get(i%4).sendMensajeJugador("COD 23");
+                PlayerHandler ph = jugadores.get(i % 4);
+                ph.sendMensajeJugador("Que desea hacer cortar o Mus, escribalo textualmente, sino no surtira efecto");
+                ph.sendMensajeJugador("COD 23");
 
-                String msg= jugadores.get(i%4).recibirLineaJugador();
-                if(msg.equals("Mus")){
-                    jugadores.get(i%4).sendMensajeJugador("OK");
+                String msg = ph.recibirLineaJugador();
+                if (msg == null) {
+                    // Si el jugador se desconectó o no respondió, tratamos como error y seguimos
+                    ph.sendMensajeJugador("ERROR");
+                    continue;
+                }
 
+                if (msg.equalsIgnoreCase("Mus")) {
+                    ph.sendMensajeJugador("OK");
 
-                } else if(msg.equals("Cortar")){
-                    jugadores.get(i%4).sendMensajeJugador("OK");
+                } else if (msg.equalsIgnoreCase("Cortar")) {
+                    ph.sendMensajeJugador("OK");
+                    // Informar a todos los jugadores que se ha cortado el Mus para que queden sincronizados
+                    mensajeTodosJugadores("Mus cortado por " + ph.Jugador().getNombre());
                     return false;
 
-                }else{
-                    jugadores.get(i).sendMensajeJugador("ERROR");
+                } else {
+                    ph.sendMensajeJugador("ERROR");
                 }
 
             }
@@ -513,7 +528,8 @@ public class Juego {
             // Puedes agregar lógica para determinar el ganador o limpiar recursos
         }
         public boolean comprobarGanador(){
-            return jugadores.get(0).Jugador().getPuntuacion()<=40 ||  jugadores.get(2).Jugador().getPuntuacion()<=40 ;
+            // Devuelve true mientras ningún equipo haya alcanzado 40 puntos
+            return jugadores.get(0).Jugador().getPuntuacion() < 40 && jugadores.get(2).Jugador().getPuntuacion() < 40;
         }
     public int posicionJugadorConCartasMasGrandes(List<PlayerHandler> jugadores) {
         int posicionGanador = -1;

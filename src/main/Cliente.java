@@ -12,6 +12,7 @@ public class Cliente {
     private final int port;
     private Scanner scanner;
     private static boolean ordago = false;
+    private String presetName = null; // si se pasa por args, se usa y no se pedirá por consola
 
     // Constructor
     /**
@@ -23,6 +24,13 @@ public class Cliente {
         this.port = port;
     }
 
+    // Constructor que acepta un nombre predefinido
+    public Cliente(String host, int port, String presetName) {
+        this.host = host;
+        this.port = port;
+        this.presetName = presetName;
+    }
+
     // Método principal que inicia el flujo del cliente
     /**
      * Precondición: Los métodos internos deben estar correctamente implementados.
@@ -32,6 +40,8 @@ public class Cliente {
         if (!conectar()) {
             return; // Salir si la conexión falla
         }
+        // Iniciar hilo que escucha mensajes del servidor de forma asíncrona
+        new Thread(new ServerListener(), "ServerListener").start();
 
         identificarJugador(); // Fase 1: Identificación
         esperarConfiguracionInicial(); // Fase 2: Configuración inicial
@@ -69,6 +79,13 @@ public class Cliente {
         Pattern pattern = Pattern.compile(regex);
         String nombre="";
         boolean nombreCorrecto = false;
+
+        // Si se pasó un nombre predefinido en args, úsalo
+        if (presetName != null && pattern.matcher(presetName).matches()) {
+            nombre = presetName;
+            nombreCorrecto = true;
+            System.out.println("Usando nombre predefinido: " + nombre);
+        }
 
         while (!nombreCorrecto) {
             System.out.println("Escribe tu nombre de jugador:");
@@ -112,18 +129,17 @@ public class Cliente {
      */
     public void jugar() {
         System.out.println("¡El juego ha comenzado!");
-        leerVariasLineas();
+        // Leer líneas desde la consola y enviarlas al servidor
         try (BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
             String userInput;
-            while ((userInput = consoleInput.readLine()) != null || ordago) {
-                if (ordago) {
-                    ordago = false;
-                    leerVariasLineas();
-                } else if (userInput.equalsIgnoreCase("salir")) {
+            while ((userInput = consoleInput.readLine()) != null) {
+                if (userInput.trim().isEmpty()) continue;
+                if (userInput.equalsIgnoreCase("salir")) {
                     sendMessage("salir");
                     break;
                 }
-                // (El resto de la lógica del juego permanece igual)
+                // Enviar cualquier otra entrada del usuario al servidor
+                sendMessage(userInput);
             }
         } catch (IOException e) {
             System.out.println("Error durante el juego: " + e.getMessage());
@@ -212,6 +228,12 @@ public class Cliente {
             try {
                 String serverMessage;
                 while ((serverMessage = in.readLine()) != null) {
+                    // Filtrar mensajes de protocolo (ej. COD 23) para no mostrarlos al usuario final
+                    if (serverMessage != null && serverMessage.startsWith("COD ")) {
+                        // Si necesitas verlos para depuración, descomenta la siguiente línea
+                        // System.out.println("(PROTO) " + serverMessage);
+                        continue;
+                    }
                     System.out.println("Servidor: " + serverMessage);
                 }
             } catch (IOException e) {
@@ -225,9 +247,24 @@ public class Cliente {
     // Punto de entrada del programa
     public static void main(String[] args) {
         String host = "localhost"; // Cambiar si el servidor está en otro host
-        int port = 12345;          // El puerto debe coincidir con el del servidor
+        int port = 12346;          // El puerto debe coincidir con el del servidor
 
-        Cliente cliente = new Cliente(host, port);
+        // Parse simple args: --name NAME or first arg treated as name
+        String presetName = null;
+        if (args != null && args.length > 0) {
+            for (int i = 0; i < args.length; i++) {
+                if ("--name".equals(args[i]) && i + 1 < args.length) {
+                    presetName = args[i + 1];
+                    break;
+                } else if (!args[i].startsWith("--") && presetName == null) {
+                    // take first non-flag arg as name
+                    presetName = args[i];
+                    break;
+                }
+            }
+        }
+
+        Cliente cliente = new Cliente(host, port, presetName);
         cliente.start();
 
     }

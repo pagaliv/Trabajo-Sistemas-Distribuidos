@@ -1,0 +1,17 @@
+Conectado al servidor en localhost:12346
+Escribe tu nombre de jugador:
+Nombre enviado al servidor.
+Esperando configuración inicial del juego...
+Servidor: ¡Bienvenido al servidor de Mus!
+Servidor: La partida está comenzando...
+Servidor: Tu compañero es Alice
+Servidor: [2 de copas] 
+Servidor: Estas son tus cartas
+Servidor: [Rey de copas] 
+Servidor: [4 de copas] 
+Servidor: Configuración lista
+¡El juego ha comenzado!
+Servidor: [Caballo de espadas] 
+Servidor: Turno del jugador: Bob
+Servidor: Que desea hacer cortar o Mus, escribalo textualmente, sino no surtira efecto
+Servidor: COD 23

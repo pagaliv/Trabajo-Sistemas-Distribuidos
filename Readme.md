@@ -128,12 +128,6 @@ El cliente actual filtra las líneas que empiezan por `COD ` para no mostrarlas 
 - Para ejecutar una sesión rápida en tu máquina: compila con `javac -d out $(find src -name "*.java")`, lanza el servidor y 4 clientes con `./run_all.sh` o manualmente en cuatro terminales.
 - Revisa `logs/` para ver `server.log` y `client_*.log` que contienen trazas útiles para depuración.
 
-## Contacto y seguimiento
+# Autor
 
-Si quieres, puedo:
-
-- Generar diffs detallados de los cambios hechos.
-- Añadir tests básicos y scripts `clean_and_run.sh` que hagan kill de puertos/limpien `out/`, compilen y lancen todo en un solo comando.
-- Implementar el protocolo etiquetado y adaptar el cliente para manejarlo.
-
-Indica qué prefieres y lo añado.
+- Desarrollado y mantenido por [pagaliv](https://github.com/pagaliv)(Menuda documentación se ha marcado)

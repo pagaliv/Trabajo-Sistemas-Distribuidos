@@ -1,68 +1,47 @@
-Servidor iniciado en el puerto 12346
-Cliente conectado desde /127.0.0.1
-Cliente conectado desde /127.0.0.1
-Cliente conectado desde /127.0.0.1
-Cliente conectado desde /127.0.0.1
-Jugador añadido: Bob
-Jugador conectado: Bob
-Jugador añadido: Carol
-Jugador conectado: Carol
-Jugador añadido: Alice
-Jugador conectado: Alice
-Jugador añadido: Dave
+nohup: ignoring input
+Servidor iniciado en el puerto 12347
+Cliente conectado desde /0:0:0:0:0:0:0:1
+Cliente conectado desde /0:0:0:0:0:0:0:1
+Jugador añadido: Bot4
+Jugador conectado: Bot4
+Cliente conectado desde /0:0:0:0:0:0:0:1
+Cliente conectado desde /0:0:0:0:0:0:0:1
+Jugador añadido: Bot3
+Jugador conectado: Bot3
+Jugador añadido: Bot1
+Jugador conectado: Bot1
+Cliente conectado desde /0:0:0:0:0:0:0:1
+Jugador añadido: Bot2
 ¡Todos los jugadores están conectados! Iniciando la partida...
-La partida ha comenzado.
-Se envio a Bob: Estas son tus cartas
-Se envio a Carol: Estas son tus cartas
-Se envio a Alice: Estas son tus cartas
-Se envio a Dave: Estas son tus cartas
-Bob ha recibido la carta: [2 de copas] 
-Bob ha recibido la carta: [Rey de copas] 
-Bob ha recibido la carta: [4 de copas] 
-Bob ha recibido la carta: [Caballo de espadas] 
-Carol ha recibido la carta: [Caballo de bastos] 
-Carol ha recibido la carta: [1 de bastos] 
-Carol ha recibido la carta: [1 de espadas] 
-Carol ha recibido la carta: [6 de bastos] 
-Alice ha recibido la carta: [5 de oros] 
-Alice ha recibido la carta: [4 de bastos] 
-Alice ha recibido la carta: [6 de copas] 
-Alice ha recibido la carta: [5 de espadas] 
-Dave ha recibido la carta: [Sota de bastos] 
-Dave ha recibido la carta: [7 de espadas] 
-Dave ha recibido la carta: [2 de espadas] 
-Dave ha recibido la carta: [3 de espadas] 
-Se envio a Bob: [2 de copas] 
-Se envio a Bob: [Rey de copas] 
-Se envio a Bob: [4 de copas] 
-Se envio a Bob: [Caballo de espadas] 
-Se envio a Carol: [Caballo de bastos] 
-Se envio a Carol: [1 de bastos] 
-Se envio a Carol: [1 de espadas] 
-Se envio a Carol: [6 de bastos] 
-Se envio a Alice: [5 de oros] 
-Se envio a Alice: [4 de bastos] 
-Se envio a Alice: [6 de copas] 
-Se envio a Alice: [5 de espadas] 
-Se envio a Dave: [Sota de bastos] 
-Se envio a Dave: [7 de espadas] 
-Se envio a Dave: [2 de espadas] 
-Se envio a Dave: [3 de espadas] 
-Se envio a Bob: Configuración lista
-Se envio a Carol: Configuración lista
-Se envio a Alice: Configuración lista
-Se envio a Dave: Configuración lista
-Se envio a Bob: Turno del jugador: Bob
-Se envio a Carol: Turno del jugador: Bob
-Se envio a Alice: Turno del jugador: Bob
-Se envio a Dave: Turno del jugador: Bob
-Se envio a Bob: Que desea hacer cortar o Mus, escribalo textualmente, sino no surtira efecto
-Se envio a Bob: COD 23
-Cliente conectado desde /127.0.0.1
-Cliente conectado desde /127.0.0.1
-Cliente conectado desde /127.0.0.1
-Cliente conectado desde /127.0.0.1
-Cliente conectado desde /127.0.0.1
-Cliente conectado desde /127.0.0.1
-Cliente conectado desde /127.0.0.1
-Cliente conectado desde /127.0.0.1
+Se envio a Bot4: Es tu turno: Bot4
+Se envio a Bot3: Espera tu turno; jugador actual: Bot4
+Se envio a Bot1: Espera tu turno; jugador actual: Bot4
+Se envio a Bot2: Espera tu turno; jugador actual: Bot4
+[cortaroMus] Preguntando a Bot4 si quiere Mus/Cortar
+Se envio a Bot4: Indica 'M' para Mus o 'C' para Cortar (una sola letra, mayúscula o minúscula aceptada).
+Se envio a Bot4: COD 23
+[recibirLineaJugador] hilo=pool-1-thread-1 interrupted=false queueSize=0
+[LOG_RECV] de Bot4: 'M'
+Recibido de Bot4: 'M' (thread=pool-1-thread-1)
+[cortaroMus] respuesta obtenida de Bot4: 'M'
+Se envio a Bot4: OK
+[cortaroMus] Preguntando a Bot3 si quiere Mus/Cortar
+Se envio a Bot3: Indica 'M' para Mus o 'C' para Cortar (una sola letra, mayúscula o minúscula aceptada).
+Se envio a Bot3: COD 23
+[recibirLineaJugador] hilo=pool-1-thread-1 interrupted=false queueSize=0
+[LOG_RECV] de Bot3: 'M'
+Recibido de Bot3: 'M' (thread=pool-1-thread-1)
+[cortaroMus] respuesta obtenida de Bot3: 'M'
+Se envio a Bot3: OK
+[cortaroMus] Preguntando a Bot1 si quiere Mus/Cortar
+Se envio a Bot1: Indica 'M' para Mus o 'C' para Cortar (una sola letra, mayúscula o minúscula aceptada).
+Se envio a Bot1: COD 23
+[recibirLineaJugador] hilo=pool-1-thread-1 interrupted=false queueSize=0
+[LOG_RECV] de Bot1: 'M'
+Recibido de Bot1: 'M' (thread=pool-1-thread-1)
+[cortaroMus] respuesta obtenida de Bot1: 'M'
+Se envio a Bot1: OK
+[cortaroMus] Preguntando a Bot2 si quiere Mus/Cortar
+Se envio a Bot2: Indica 'M' para Mus o 'C' para Cortar (una sola letra, mayúscula o minúscula aceptada).
+Se envio a Bot2: COD 23
+[recibirLineaJugador] hilo=pool-1-thread-1 interrupted=false queueSize=0

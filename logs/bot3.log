@@ -1,0 +1,19 @@
+nohup: ignoring input
+Bot3: nombre enviado
+Bot3: SERVER: ¡Bienvenido al servidor de Mus!
+Bot3: SERVER: La partida está comenzando...
+Bot3: SERVER: Espera tu turno; jugador actual: Bot4
+Bot3: SERVER: Indica 'M' para Mus o 'C' para Cortar (una sola letra, mayúscula o minúscula aceptada).
+Bot3: -> Enviando M
+Bot3: SERVER: COD 23
+Bot3: SERVER: [ACK_RECV] M
+Bot3: ACK recibido: [ACK_RECV] M
+Bot3: SERVER: OK
+Traceback (most recent call last):
+  File "/tmp/mus_bot.py", line 18, in <module>
+    line=f.readline()
+         ^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: timed out

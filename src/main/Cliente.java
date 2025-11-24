@@ -138,6 +138,16 @@ public class Cliente {
                     sendMessage("salir");
                     break;
                 }
+                // Normalizar comandos para cortar/Mus: aceptar 'c' o 'm' (cualquier caso) and send uppercase single-letter protocol
+                String trimmed = userInput.trim();
+                if (trimmed.equalsIgnoreCase("c")) {
+                    sendMessage("C");
+                    continue;
+                } else if (trimmed.equalsIgnoreCase("m")) {
+                    sendMessage("M");
+                    continue;
+                }
+
                 // Enviar cualquier otra entrada del usuario al servidor
                 sendMessage(userInput);
             }
@@ -181,6 +191,8 @@ public class Cliente {
     public void sendMessage(String message) {
         if (out != null) {
             out.println(message);
+            // Log de depuración: mostrar lo que enviamos al servidor
+            System.out.println("(enviado) -> " + message);
         } else {
             System.err.println("El flujo de salida es null. No se puede enviar el mensaje.");
         }

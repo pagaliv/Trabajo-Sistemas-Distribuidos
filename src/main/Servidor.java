@@ -13,7 +13,23 @@ public class Servidor {
 
     private ServerSocket serverSocket;
 
-    private static final int PORT = 12346;
+    // Allow overriding the port via system property 'server.port' or env var 'SERVER_PORT'
+    private static final int PORT;
+    static {
+        int port = 12346;
+        try {
+            String prop = System.getProperty("server.port");
+            if (prop != null && !prop.isEmpty()) port = Integer.parseInt(prop);
+            else {
+                String env = System.getenv("SERVER_PORT");
+                if (env != null && !env.isEmpty()) port = Integer.parseInt(env);
+            }
+        } catch (Exception e) {
+            // fallback to default
+            port = 12346;
+        }
+        PORT = port;
+    }
     private final List<PlayerHandler> jugadores = Collections.synchronizedList(new ArrayList<>());
     // Pool de hilos para manejar clientes (instancia, no estático)
     private ExecutorService threadPool = null;

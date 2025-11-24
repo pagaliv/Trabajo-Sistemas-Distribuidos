@@ -6,52 +6,22 @@ import java.util.*;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.stream.Collectors;
-
+// Clase Juego: contiene la lógica principal de la partida
 public class Juego {
-        private  List<PlayerHandler> jugadores;
-        private  Deck deck;
-        private int indiceJugadorActual;
-        private CyclicBarrier cyclicBarrier;
+    private final List<PlayerHandler> jugadores;
+    private Deck deck;
+    private final CyclicBarrier cyclicBarrier;
+    private int indiceJugadorActual = 0;
 
+    public Juego(List<PlayerHandler> jugadores, CyclicBarrier cyclicBarrier) {
+        this.jugadores = jugadores;
+        this.cyclicBarrier = cyclicBarrier;
+        this.deck = new Deck();
+    }
 
-    // Constructor
-        public Juego(List<PlayerHandler> jugadores, CyclicBarrier c) {
-            // Pre: La lista de jugadores no está vacía
-            // Post: Inicializa el juego con los jugadores y un mazo de cartas
-            this.jugadores = new ArrayList<>(jugadores);
-            this.deck = new Deck();
-            this.deck.fillBarajaEspanola();
-            this.indiceJugadorActual = 0;
-            this.cyclicBarrier=c;
-        }
-
-        // Método para inicializar el juego
-
-        public void jugar() {
-            int ronda;
-            System.out.println("La partida ha comenzado.");
-            informarCompanyero();
-            //  repartir cartas a los jugadores
-            deck.shuffle();
-            mensajeTodosJugadores("Estas son tus cartas");
-            for (PlayerHandler jugador : jugadores) {
-                for (int i = 0; i < 4; i++) { // Repartir 4 cartas por jugador
-                    jugador.Jugador().addCard(deck.extractCard());
-                }
-                // jugador.Jugador().showHand(); // Mostrar la mano del jugador
-            }
-            for (PlayerHandler jugadorIterativo:jugadores){
-                    for (Card carta : jugadorIterativo.Jugador().getMano()) {
-                        jugadorIterativo.sendMensajeJugador(carta.toString());
-                    }
-            }
-
-            mensajeTodosJugadores("Configuración lista");
-
-
-
-
-
+    // Inicia el bucle principal del juego
+    public void jugar() {
+            
             //Separación por partes
 
 
@@ -139,34 +109,69 @@ public class Juego {
             mensajeTodosJugadores("hora de apostar");
             for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
                 if(!ordago){
-                    jugadores.get(i%4).sendMensajeJugador("Apuesta a Grandes, tu apuesta se sumara a la más grande de tus adversarios si la han hecho");
-                    jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
+                    PlayerHandler ph = jugadores.get(i%4);
+                    Jugador j = ph.Jugador();
+                    int puntosActuales = j.getPuntuacion();
+                    int puntosNecesarios = 40 - puntosActuales; // apostar esto equivale a ordago
+                    int minApuesta = 2;
+                    int maxApuesta = puntosNecesarios;
+                    // Si el número necesario para ganar es menor que el mínimo, forzamos que min==max para indicar ordago posible
+                    if (maxApuesta < minApuesta) {
+                        minApuesta = maxApuesta;
+                    }
+
+                    // Mensaje claro de instrucciones
+                    ph.sendMensajeJugador("Apuesta a Grandes: puedes apostar entre " + minApuesta + " y " + maxApuesta + ".");
+                    ph.sendMensajeJugador("Para apostar escribe 'Apostar' y en la siguiente línea la cantidad; para pasar escribe 'Pasar'.");
+                    ph.sendMensajeJugador("Apostar o Pasar");
                     apuestasEquipoContrario(i,apuestagrandes);
-                    jugadores.get(i%4).sendMensajeJugador("COD 23");
+                    ph.sendMensajeJugador("COD 23");
 
+                    String msg = ph.recibirLineaJugador();
+                    if (msg == null) {
+                        ph.sendMensajeJugador("ERROR");
+                        continue;
+                    }
 
-                    String msg= jugadores.get(i%4).recibirLineaJugador();
                     if(msg.equalsIgnoreCase("Apostar")){
-                        jugadores.get(i%4).sendMensajeJugador("OK");
-                        //Cuanto va a apostar
-                        String msg2= jugadores.get(i%4).recibirLineaJugador();
-                        if(Integer.parseInt(msg2)>=(40-jugadores.get(i%4).Jugador().getPuntuacion())){
-                            jugadores.get(i%4).sendMensajeJugador("COD 28");
-                            ordago=true;
-                            jugadorOrdago=i%4;
-                            paloOrdago="Grandes";
-                        }else{
-                            jugadores.get(i%4).sendMensajeJugador("COD 19");
-                            apuestagrandes[i%4]=Integer.parseInt(msg2)+CantidadapuestasEquipoContrario(i,apuestagrandes);
+                        ph.sendMensajeJugador("OK");
+                        // Cuánto va a apostar (leer siguiente línea)
+                        String montoStr = ph.recibirLineaJugador();
+                        if (montoStr == null || montoStr.isEmpty()) {
+                            ph.sendMensajeJugador("ERROR");
+                            continue;
+                        }
+                        int monto;
+                        try {
+                            monto = Integer.parseInt(montoStr.trim());
+                        } catch (NumberFormatException e) {
+                            ph.sendMensajeJugador("ERROR");
+                            continue;
+                        }
 
+                        // Si apuesta >= puntosNecesarios -> ordago
+                        if (monto >= puntosNecesarios) {
+                            ph.sendMensajeJugador("COD 28");
+                            ordago = true;
+                            jugadorOrdago = i % 4;
+                            paloOrdago = "Grandes";
+                            // Notificar adversarios explícitamente
+                            jugadores.get((jugadorOrdago + 1) % 4).sendMensajeJugador("El jugador " + j.getNombre() + " ha hecho ORDAGO a Grandes (COD 28)");
+                            jugadores.get((jugadorOrdago + 3) % 4).sendMensajeJugador("El jugador " + j.getNombre() + " ha hecho ORDAGO a Grandes (COD 28)");
+
+                        } else if (monto >= minApuesta && monto < puntosNecesarios) {
+                            ph.sendMensajeJugador("COD 19");
+                            apuestagrandes[i%4] = monto + CantidadapuestasEquipoContrario(i,apuestagrandes);
+
+                        } else {
+                            ph.sendMensajeJugador("ERROR");
                         }
 
                     } else if(msg.equalsIgnoreCase("Pasar")){
-                        jugadores.get(i%4).sendMensajeJugador("OK");
+                        ph.sendMensajeJugador("OK");
 
-
-                    }else{
-                        jugadores.get(i%4).sendMensajeJugador("ERROR");
+                    } else {
+                        ph.sendMensajeJugador("ERROR");
                     }
                 }
             }
@@ -178,35 +183,45 @@ public class Juego {
             }
             for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
                 if(!ordago){
-                    jugadores.get(i%4).sendMensajeJugador("Apuesta a Pequenyas, tu apuesta se sumara a la más grande de tus adversarios si la han hecho");
-                    jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
+                    PlayerHandler ph = jugadores.get(i%4);
+                    Jugador j = ph.Jugador();
+                    int puntosActuales = j.getPuntuacion();
+                    int puntosNecesarios = 40 - puntosActuales;
+                    int minApuesta = 2;
+                    int maxApuesta = puntosNecesarios;
+                    if (maxApuesta < minApuesta) minApuesta = maxApuesta;
+
+                    ph.sendMensajeJugador("Apuesta a Pequenyas: puedes apostar entre " + minApuesta + " y " + maxApuesta + ".");
+                    ph.sendMensajeJugador("Para apostar escribe 'Apostar' y en la siguiente línea la cantidad; para pasar escribe 'Pasar'.");
+                    ph.sendMensajeJugador("Apostar o Pasar");
                     apuestasEquipoContrario(i,apuestapequenyas);
-                    jugadores.get(i%4).sendMensajeJugador("COD 23");
+                    ph.sendMensajeJugador("COD 23");
 
+                    String msg = ph.recibirLineaJugador();
+                    if (msg == null) { ph.sendMensajeJugador("ERROR"); continue; }
 
-                    String msg= jugadores.get(i%4).recibirLineaJugador();
                     if(msg.equalsIgnoreCase("Apostar")){
-                        jugadores.get(i%4).sendMensajeJugador("OK");
-                        //Cuanto va a apostar
-                        String msg2= jugadores.get(i%4).recibirLineaJugador();
-                        if(Integer.parseInt(msg2)>=(40-jugadores.get(i%4).Jugador().getPuntuacion())){
-                            jugadores.get(i%4).sendMensajeJugador("COD 28");
-                            ordago=true;
-                            jugadorOrdago=i%4;
-                            paloOrdago="Pequenyas";
-                        }else{
-                            jugadores.get(i%4).sendMensajeJugador("COD 19");
-                            apuestapequenyas[i%4]=Integer.parseInt(msg2)+CantidadapuestasEquipoContrario(i,apuestapequenyas);
+                        ph.sendMensajeJugador("OK");
+                        String montoStr = ph.recibirLineaJugador();
+                        if (montoStr == null || montoStr.isEmpty()) { ph.sendMensajeJugador("ERROR"); continue; }
+                        int monto;
+                        try { monto = Integer.parseInt(montoStr.trim()); } catch (NumberFormatException e){ ph.sendMensajeJugador("ERROR"); continue; }
 
-                        }
+                        if (monto >= puntosNecesarios) {
+                            ph.sendMensajeJugador("COD 28");
+                            ordago = true;
+                            jugadorOrdago = i%4;
+                            paloOrdago = "Pequenyas";
+                            jugadores.get((jugadorOrdago + 1) % 4).sendMensajeJugador("El jugador " + j.getNombre() + " ha hecho ORDAGO a Pequenyas (COD 28)");
+                            jugadores.get((jugadorOrdago + 3) % 4).sendMensajeJugador("El jugador " + j.getNombre() + " ha hecho ORDAGO a Pequenyas (COD 28)");
+                        } else if (monto >= minApuesta) {
+                            ph.sendMensajeJugador("COD 19");
+                            apuestapequenyas[i%4] = monto + CantidadapuestasEquipoContrario(i,apuestapequenyas);
+                        } else { ph.sendMensajeJugador("ERROR"); }
 
                     } else if(msg.equalsIgnoreCase("Pasar")){
-                        jugadores.get(i%4).sendMensajeJugador("OK");
-
-
-                    }else{
-                        jugadores.get(i%4).sendMensajeJugador("ERROR");
-                    }
+                        ph.sendMensajeJugador("OK");
+                    } else { ph.sendMensajeJugador("ERROR"); }
                 }
             }
             if(!ordago){
@@ -214,37 +229,49 @@ public class Juego {
                 jugadores.get(m).Jugador().sumarPuntos(Arrays.stream(apuestapequenyas).max().getAsInt());
                 jugadores.get((m + 2) % 4).Jugador().sumarPuntos(Arrays.stream(apuestapequenyas).max().getAsInt());
 
-            }for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
+            }
+
+            for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
                 if(!ordago){
-                    jugadores.get(i%4).sendMensajeJugador("Apuesta a Pares, tu apuesta se sumara a la más grande de tus adversarios si la han hecho");
-                    jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
+                    PlayerHandler ph = jugadores.get(i%4);
+                    Jugador j = ph.Jugador();
+                    int puntosActuales = j.getPuntuacion();
+                    int puntosNecesarios = 40 - puntosActuales;
+                    int minApuesta = 2;
+                    int maxApuesta = puntosNecesarios;
+                    if (maxApuesta < minApuesta) minApuesta = maxApuesta;
+
+                    ph.sendMensajeJugador("Apuesta a Pares: puedes apostar entre " + minApuesta + " y " + maxApuesta + ".");
+                    ph.sendMensajeJugador("Para apostar escribe 'Apostar' y en la siguiente línea la cantidad; para pasar escribe 'Pasar'.");
+                    ph.sendMensajeJugador("Apostar o Pasar");
                     apuestasEquipoContrario(i,apuestaPares);
-                    jugadores.get(i%4).sendMensajeJugador("COD 23");
+                    ph.sendMensajeJugador("COD 23");
 
+                    String msg = ph.recibirLineaJugador();
+                    if (msg == null) { ph.sendMensajeJugador("ERROR"); continue; }
 
-                    String msg= jugadores.get(i%4).recibirLineaJugador();
                     if(msg.equalsIgnoreCase("Apostar")){
-                        jugadores.get(i%4).sendMensajeJugador("OK");
-                        //Cuanto va a apostar
-                        String msg2= jugadores.get(i%4).recibirLineaJugador();
-                        if(Integer.parseInt(msg2)>=(40-jugadores.get(i%4).Jugador().getPuntuacion())){
-                            jugadores.get(i%4).sendMensajeJugador("COD 28");
-                            ordago=true;
-                            jugadorOrdago=i%4;
-                            paloOrdago="Pares";
-                        }else{
-                            jugadores.get(i%4).sendMensajeJugador("COD 19");
-                            apuestaPares[i%4]=Integer.parseInt(msg2)+CantidadapuestasEquipoContrario(i,apuestapequenyas);
+                        ph.sendMensajeJugador("OK");
+                        String montoStr = ph.recibirLineaJugador();
+                        if (montoStr == null || montoStr.isEmpty()) { ph.sendMensajeJugador("ERROR"); continue; }
+                        int monto;
+                        try { monto = Integer.parseInt(montoStr.trim()); } catch (NumberFormatException e){ ph.sendMensajeJugador("ERROR"); continue; }
 
-                        }
+                        if (monto >= puntosNecesarios) {
+                            ph.sendMensajeJugador("COD 28");
+                            ordago = true;
+                            jugadorOrdago = i%4;
+                            paloOrdago = "Pares";
+                            jugadores.get((jugadorOrdago + 1) % 4).sendMensajeJugador("El jugador " + j.getNombre() + " ha hecho ORDAGO a Pares (COD 28)");
+                            jugadores.get((jugadorOrdago + 3) % 4).sendMensajeJugador("El jugador " + j.getNombre() + " ha hecho ORDAGO a Pares (COD 28)");
+                        } else if (monto >= minApuesta) {
+                            ph.sendMensajeJugador("COD 19");
+                            apuestaPares[i%4] = monto + CantidadapuestasEquipoContrario(i,apuestaPares);
+                        } else { ph.sendMensajeJugador("ERROR"); }
 
                     } else if(msg.equalsIgnoreCase("Pasar")){
-                        jugadores.get(i%4).sendMensajeJugador("OK");
-
-
-                    }else{
-                        jugadores.get(i%4).sendMensajeJugador("ERROR");
-                    }
+                        ph.sendMensajeJugador("OK");
+                    } else { ph.sendMensajeJugador("ERROR"); }
                 }
             }
             if(!ordago){
@@ -253,85 +280,33 @@ public class Juego {
                 jugadores.get((m + 2) % 4).Jugador().sumarPuntos(Arrays.stream(apuestaPares).max().getAsInt());
 
             }
-            for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
-                if(!ordago){
-                    jugadores.get(i%4).sendMensajeJugador("Apuesta a Juego, minimo tienes que apostar 3, tu apuesta se sumara a la más grande de tus adversarios si la han hecho");
-                    jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
-                    apuestasEquipoContrario(i,apuestaPunto);
-                    jugadores.get(i%4).sendMensajeJugador("COD 23");
-
-
-                    String msg= jugadores.get(i%4).recibirLineaJugador();
-                    if(msg.equalsIgnoreCase("Apostar")){
-                        jugadores.get(i%4).sendMensajeJugador("OK");
-
-                        //Cuanto va a apostar
-                        String msg2= jugadores.get(i%4).recibirLineaJugador();
-
-                        if(Integer.parseInt(msg2)>=(40-jugadores.get(i%4).Jugador().getPuntuacion())){
-                            jugadores.get(i%4).sendMensajeJugador("COD 28");
-                            ordago=true;
-                            jugadorOrdago=i%4;
-                            paloOrdago="Juego";
-                        }else{
-                            jugadores.get(i%4).sendMensajeJugador("COD 19");
-                            apuestaJuego[i%4]=Integer.parseInt(msg2)+CantidadapuestasEquipoContrario(i,apuestapequenyas);
-
-                        }
-
-                    } else if(msg.equalsIgnoreCase("Pasar")){
-                        jugadores.get(i%4).sendMensajeJugador("OK");
-
-
-                    }else{
-                        jugadores.get(i%4).sendMensajeJugador("ERROR");
-                    }
+            // Procesar fase Juego mediante helper (mínimo 3)
+            if (!ordago) {
+                int ord = procesarFaseApuesta("Juego", apuestaJuego, 3, "Juego");
+                if (ord != -1) {
+                    ordago = true;
+                    jugadorOrdago = ord;
+                    paloOrdago = "Juego";
+                } else {
+                    int m3 = posicionJugadorConCartasMasGrandes(jugadores);
+                    jugadores.get(m3).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
+                    jugadores.get((m3 + 2) % 4).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
                 }
-            }
-            if(!ordago){
-                int m=posicionJugadorConCartasMasGrandes(jugadores);
-                jugadores.get(m).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
-                jugadores.get((m + 2) % 4).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
             }
             if(!apostadoenJuego){
-                for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
-                    if(!ordago){
-                        jugadores.get(i%4).sendMensajeJugador("Apuesta al punto, minimo tienes que apostar 3, tu apuesta se sumara a la más grande de tus adversarios si la han hecho");
-                        jugadores.get(i%4).sendMensajeJugador("Apostar o Pasar");
-                        apuestasEquipoContrario(i,apuestaPunto);
-                        jugadores.get(i%4).sendMensajeJugador("COD 23");
-
-
-                        String msg= jugadores.get(i%4).recibirLineaJugador();
-                        if(msg.equalsIgnoreCase("Apostar")){
-                            jugadores.get(i%4).sendMensajeJugador("OK");
-                            //Cuanto va a apostar
-                            String msg2= jugadores.get(i%4).recibirLineaJugador();
-                            if(Integer.parseInt(msg2)>=(40-jugadores.get(i%4).Jugador().getPuntuacion())){
-                                jugadores.get(i%4).sendMensajeJugador("COD 28");
-                                ordago=true;
-                                jugadorOrdago=i%4;
-                                paloOrdago="Juego";
-                            }else{
-                                jugadores.get(i%4).sendMensajeJugador("COD 19");
-                                apuestaJuego[i%4]=Integer.parseInt(msg2)+CantidadapuestasEquipoContrario(i,apuestapequenyas);
-
-                            }
-
-                        } else if(msg.equalsIgnoreCase("Pasar")){
-                            jugadores.get(i%4).sendMensajeJugador("OK");
-
-
-                        }else{
-                            jugadores.get(i%4).sendMensajeJugador("ERROR");
-                        }
-                    }
+            // Procesar fase al Punto mediante helper (mínimo 3)
+            if (!ordago) {
+                int ord = procesarFaseApuesta("Punto", apuestaPunto, 3, "Punto");
+                if (ord != -1) {
+                    ordago = true;
+                    jugadorOrdago = ord;
+                    paloOrdago = "Punto";
+                } else {
+                    int m4 = posicionJugadorConCartasMasGrandes(jugadores);
+                    jugadores.get(m4).Jugador().sumarPuntos(Arrays.stream(apuestaPunto).max().getAsInt());
+                    jugadores.get((m4 + 2) % 4).Jugador().sumarPuntos(Arrays.stream(apuestaPunto).max().getAsInt());
                 }
-                if(!ordago){
-                    int m=posicionJugadorConCartasMasGrandes(jugadores);
-                    jugadores.get(m).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
-                    jugadores.get((m + 2) % 4).Jugador().sumarPuntos(Arrays.stream(apuestaJuego).max().getAsInt());
-                }
+            }
             }
 
 
@@ -454,20 +429,22 @@ public class Juego {
         public boolean cortaroMus(){
             for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
                 PlayerHandler ph = jugadores.get(i % 4);
-                ph.sendMensajeJugador("Que desea hacer cortar o Mus, escribalo textualmente, sino no surtira efecto");
+                System.out.println("[cortaroMus] Preguntando a " + ph.Jugador().getNombre() + " si quiere Mus/Cortar");
+                ph.sendMensajeJugador("Indica 'M' para Mus o 'C' para Cortar (una sola letra, mayúscula o minúscula aceptada).");
                 ph.sendMensajeJugador("COD 23");
 
                 String msg = ph.recibirLineaJugador();
+                System.out.println("[cortaroMus] respuesta obtenida de " + ph.Jugador().getNombre() + ": " + (msg == null ? "<null>" : ("'" + msg + "'")) );
                 if (msg == null) {
                     // Si el jugador se desconectó o no respondió, tratamos como error y seguimos
                     ph.sendMensajeJugador("ERROR");
                     continue;
                 }
 
-                if (msg.equalsIgnoreCase("Mus")) {
+                if (msg.equalsIgnoreCase("Mus") || msg.equalsIgnoreCase("M")) {
                     ph.sendMensajeJugador("OK");
 
-                } else if (msg.equalsIgnoreCase("Cortar")) {
+                } else if (msg.equalsIgnoreCase("Cortar") || msg.equalsIgnoreCase("C")) {
                     ph.sendMensajeJugador("OK");
                     // Informar a todos los jugadores que se ha cortado el Mus para que queden sincronizados
                     mensajeTodosJugadores("Mus cortado por " + ph.Jugador().getNombre());
@@ -731,6 +708,62 @@ public class Juego {
         return n;
 
 
+    }
+
+    /**
+     * Procesa una fase de apuesta (Grandes, Pequenyas, Pares, Juego, Punto) de forma genérica.
+     * Devuelve el índice del jugador que hizo ordago (>= puntosNecesarios) o -1 si no hubo ordago.
+     */
+    private int procesarFaseApuesta(String faseNombre, int[] apuestas, int minApuestaParam, String palo) {
+        for (int i = indiceJugadorActual; i < indiceJugadorActual + 4; i++) {
+            PlayerHandler ph = jugadores.get(i % 4);
+            Jugador j = ph.Jugador();
+            int puntosActuales = j.getPuntuacion();
+            int puntosNecesarios = 40 - puntosActuales;
+            int minApuesta = Math.max(2, minApuestaParam);
+            int maxApuesta = puntosNecesarios;
+            if (maxApuesta < minApuesta) minApuesta = maxApuesta;
+
+            ph.sendMensajeJugador("Apuesta a " + faseNombre + ": puedes apostar entre " + minApuesta + " y " + maxApuesta + ".");
+            ph.sendMensajeJugador("Para apostar escribe 'Apostar' y en la siguiente línea la cantidad; para pasar escribe 'Pasar'.");
+            ph.sendMensajeJugador("Apostar o Pasar");
+            apuestasEquipoContrario(i, apuestas);
+            ph.sendMensajeJugador("COD 23");
+
+            String msg = ph.recibirLineaJugador();
+            if (msg == null) {
+                ph.sendMensajeJugador("ERROR");
+                continue;
+            }
+
+            if (msg.equalsIgnoreCase("Apostar")) {
+                ph.sendMensajeJugador("OK");
+                String montoStr = ph.recibirLineaJugador();
+                if (montoStr == null || montoStr.isEmpty()) { ph.sendMensajeJugador("ERROR"); continue; }
+                int monto;
+                try { monto = Integer.parseInt(montoStr.trim()); } catch (NumberFormatException e){ ph.sendMensajeJugador("ERROR"); continue; }
+
+                if (monto >= puntosNecesarios) {
+                    // ordago
+                    ph.sendMensajeJugador("COD 28");
+                    // notify adversaries
+                    jugadores.get((i % 4 + 1) % 4).sendMensajeJugador("El jugador " + j.getNombre() + " ha hecho ORDAGO a " + palo + " (COD 28)");
+                    jugadores.get((i % 4 + 3) % 4).sendMensajeJugador("El jugador " + j.getNombre() + " ha hecho ORDAGO a " + palo + " (COD 28)");
+                    return i % 4;
+                } else if (monto >= minApuesta) {
+                    ph.sendMensajeJugador("COD 19");
+                    apuestas[i%4] = monto + CantidadapuestasEquipoContrario(i, apuestas);
+                } else {
+                    ph.sendMensajeJugador("ERROR");
+                }
+
+            } else if (msg.equalsIgnoreCase("Pasar")) {
+                ph.sendMensajeJugador("OK");
+            } else {
+                ph.sendMensajeJugador("ERROR");
+            }
+        }
+        return -1;
     }
 
 

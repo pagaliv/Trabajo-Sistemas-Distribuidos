@@ -37,6 +37,42 @@ Scripts auxiliares (en la raíz):
 - `stop_all.sh` — Detiene procesos Java que correspondan a `main.Servidor` o `main.Cliente` y deja los logs en `logs/`.
 
 ## Cambios recientes (resumen de lo que se ha modificado)
+
+### v1.0.2 (EN DESARROLLO - NO FUNCIONAL)
+**Estado**: Esta versión tiene problemas críticos de comunicación cliente-servidor que impiden el funcionamiento del juego.
+
+**Problema conocido**: El servidor no está recibiendo correctamente las respuestas de los clientes durante la fase de Mus/Cortar. Cuando un jugador escribe 'M' o 'C' para indicar Mus o Cortar, el mensaje se envía desde el cliente pero no llega a la lógica del juego en el servidor.
+
+**Cambios implementados**:
+- **Cliente (`src/main/Cliente.java`)**:
+  - Normalización de comandos Mus/Cortar: ahora acepta 'M' (mayúscula o minúscula) para Mus y 'C' para Cortar, enviando siempre la versión en mayúscula al servidor.
+  - Añadido log de depuración `(enviado) -> <mensaje>` para rastrear todo lo que el cliente envía al servidor.
+
+- **Servidor (`src/main/PlayerHandler.java`)**:
+  - Implementado un hilo lector dedicado (`readerThread`) que encola todos los mensajes recibidos del cliente en una `BlockingQueue`.
+  - `recibirLineaJugador()` ahora lee desde la cola usando `take()` (bloqueante) en lugar de leer directamente del socket.
+  - Añadidos logs de depuración: `[LOG_RECV]`, `[LOG_ENQUEUE]`, `[recibirLineaJugador]` y ACK al cliente `[ACK_RECV]`.
+  - El hilo principal de `PlayerHandler` se mantiene vivo después del `CyclicBarrier` para no cerrar la conexión prematuramente.
+
+- **Servidor (`src/main/Servidor.java`)**:
+  - Soporte para sobrescribir el puerto mediante property `-Dserver.port=XXXX` o variable de entorno `SERVER_PORT`.
+
+- **Juego (`src/main/Juego.java`)**:
+  - Actualizado `cortaroMus()` para aceptar tanto las palabras completas ("Mus", "Cortar") como las letras simples ('M', 'C').
+  - Añadidos logs `[cortaroMus] Preguntando a...` y `[cortaroMus] respuesta obtenida...` para depuración.
+  - Prompt mejorado: "Indica 'M' para Mus o 'C' para Cortar (una sola letra, mayúscula o minúscula aceptada)."
+
+**Síntoma del problema**:
+- El cliente muestra `(enviado) -> M` indicando que envió el mensaje.
+- El servidor muestra `[recibirLineaJugador] hilo=pool-1-thread-X interrupted=false queueSize=0`, lo que indica que la cola está vacía cuando `Juego` intenta leer la respuesta.
+- A veces aparece `[cortaroMus] respuesta obtenida de <jugador>: <null>`, confirmando que no se recibió respuesta.
+
+**Posible causa**: Puede haber un problema de sincronización entre el momento en que el `readerThread` lee del socket y encola el mensaje, y el momento en que `Juego` llama a `recibirLineaJugador()`. Se requiere investigación adicional sobre el orden de ejecución de los hilos y posibles condiciones de carrera.
+
+**Recomendación**: No usar esta versión para jugar. Revertir a v1.0.1 o esperar a la corrección en v1.0.3.
+
+---
+
 ### v1.0.1
 Nota: estos cambios se hicieron para corregir errores de sincronización, comparación de jugadores y mejorar la experiencia de ejecución local.
 

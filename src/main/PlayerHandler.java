@@ -53,40 +53,34 @@ public class PlayerHandler implements Runnable {
             // Asignamos el PrintWriter al jugador para enviarle mensajes
             jugador.setOut(out);  // Usamos un método setter en Jugador
 
-            // Añadir jugador al servidor
-            servidor.addPlayer(this);
-            System.out.println("Jugador conectado: " + jugador.getNombre());// Inicialización de flujos
-
-            // Iniciar hilo lector que registra y encola todas las líneas que lleguen desde el cliente.
+            // Iniciar hilo lector ANTES de añadir al servidor para evitar condición de carrera
+            // (el servidor podría liberar el barrier y comenzar el juego antes de que el reader esté listo)
             Thread readerThread = new Thread(() -> {
                 try {
                     String linea;
                     while ((linea = in.readLine()) != null) {
-                        // Log persistente para depuración: siempre mostramos lo que llega
-                        System.out.println("[LOG_RECV] de " + (jugador != null ? jugador.getNombre() : "<unknown>") + ": '" + linea + "'");
-                        // Encolamos la línea (put para asegurar encolado)
+                        // Encolar el mensaje recibido
                         try {
                             messageQueue.put(linea);
-                            System.out.println("[LOG_ENQUEUE] de " + (jugador != null ? jugador.getNombre() : "<unknown>") + " queueSize=" + messageQueue.size());
                         } catch (InterruptedException ie) {
                             Thread.currentThread().interrupt();
-                            System.err.println("Enqueue interrumpido para " + (jugador != null ? jugador.getNombre() : "<unknown>"));
+                            System.err.println("Hilo lector interrumpido para " + (jugador != null ? jugador.getNombre() : "jugador"));
                             break;
-                        }
-                        // Enviar un ACK de depuración al cliente para confirmar recepción
-                        try {
-                            out.println("[ACK_RECV] " + linea);
-                        } catch (Exception e) {
-                            System.err.println("No se pudo enviar ACK al cliente: " + e.getMessage());
                         }
                     }
                 } catch (IOException e) {
-                    // si ocurre un error de lectura, lo mostramos y salimos
-                    System.err.println("Error en lector de cliente: " + e.getMessage());
+                    // Conexión cerrada o error de lectura
+                    if (jugador != null) {
+                        System.out.println("Conexión cerrada para: " + jugador.getNombre());
+                    }
                 }
             }, "Reader-" + nombre);
             readerThread.setDaemon(true);
             readerThread.start();
+
+            // Ahora sí, añadir jugador al servidor (esto puede liberar el barrier)
+            servidor.addPlayer(this);
+            System.out.println("Jugador conectado: " + jugador.getNombre());
 
 
             //esperar a que todos los jugadores lleguen
@@ -132,33 +126,27 @@ public class PlayerHandler implements Runnable {
 
     public String recibirLineaJugador() {
         try {
-        // Depuración: mostrar estado del hilo y cola antes de bloquear
-        System.out.println("[recibirLineaJugador] hilo=" + Thread.currentThread().getName() +
-            " interrupted=" + Thread.currentThread().isInterrupted() +
-            " queueSize=" + messageQueue.size());
+            // Esperar hasta 30 segundos por un mensaje en la cola
+            String linea = messageQueue.poll(30, TimeUnit.SECONDS);
 
-        // Intentar obtener la línea desde la cola (llenada por el readerThread)
-        // Usamos take() para bloquear hasta que haya una línea disponible.
-        String linea = messageQueue.take();
-
-            if (linea.isEmpty()) {
-                System.out.println("Se recibió una línea vacía de " + (jugador != null ? jugador.getNombre() : "<unknown>") + ". Ignorando.");
-                return ""; // devolver cadena vacía para que el llamador pueda distinguir
+            if (linea == null) {
+                System.err.println("Timeout esperando respuesta de " + (jugador != null ? jugador.getNombre() : "jugador"));
+                return null;
             }
 
-            // Log de depuración: mostrar lo que recibió el servidor de este jugador
-            System.out.println("Recibido de " + (jugador != null ? jugador.getNombre() : "<unknown>") + ": '" + linea + "' (thread=" + Thread.currentThread().getName() + ")");
+            if (linea.isEmpty()) {
+                return ""; // Línea vacía
+            }
 
             return linea;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.err.println("Lectura interrumpida: " + e.getMessage());
-            e.printStackTrace();
+            return null;
         } catch (Exception e) {
             System.err.println("Error inesperado: " + e.getMessage());
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     public void desconectarJugador() {

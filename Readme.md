@@ -38,43 +38,109 @@ Scripts auxiliares (en la raíz):
 
 ## Cambios recientes (resumen de lo que se ha modificado)
 
-### v1.0.2 (EN DESARROLLO - NO FUNCIONAL)
-**Estado**: Esta versión tiene problemas críticos de comunicación cliente-servidor que impiden el funcionamiento del juego.
+### v1.0.3 (FUNCIONAL - 25 Nov 2025)
+**Estado**: FUNCIONAL - Problema crítico de comunicación cliente-servidor RESUELTO
 
-**Problema conocido**: El servidor no está recibiendo correctamente las respuestas de los clientes durante la fase de Mus/Cortar. Cuando un jugador escribe 'M' o 'C' para indicar Mus o Cortar, el mensaje se envía desde el cliente pero no llega a la lógica del juego en el servidor.
+**Problemas resueltos**:
+
+1. **Condición de carrera en PlayerHandler**: El servidor no estaba recibiendo las respuestas de los clientes durante la fase de Mus/Cortar porque cuando el cuarto jugador se conectaba, liberaba el CyclicBarrier antes de que su propio readerThread estuviera listo.
+
+2. **Bloqueo en Cliente.esperarConfiguracionInicial()**: El cliente nunca llegaba al método jugar() porque esperarConfiguracionInicial() se quedaba bloqueado indefinidamente compitiendo con ServerListener por leer del mismo BufferedReader.
+
+**Mejoras implementadas**:
+
+**Servidor (PlayerHandler.java)**:
+- Reordenada la inicialización: el readerThread ahora se crea e inicia ANTES de llamar a servidor.addPlayer(this)
+- Esto garantiza que todos los hilos lectores estén operativos antes de que el CyclicBarrier se libere y comience el juego
+- Arquitectura de hilos mejorada:
+  - Cada PlayerHandler tiene un hilo lector dedicado que lee continuamente del socket
+  - Los mensajes se encolan en una BlockingQueue<String>
+  - recibirLineaJugador() usa messageQueue.poll(30, TimeUnit.SECONDS) con timeout
+  - El hilo principal se mantiene vivo después del barrier para no cerrar la conexión prematuramente
+- Logging simplificado: eliminados logs excesivos de depuración, mantenidos solo los esenciales
+
+**Cliente (Cliente.java)**:
+- Eliminada la llamada a esperarConfiguracionInicial() en el método start()
+- Ahora el flujo es: conectar() -> identificarJugador() -> jugar() -> disconnect()
+- El ServerListener (hilo asíncrono) maneja todos los mensajes del servidor sin bloquear el flujo principal
+- Añadido flush() explícito en sendMessage() para garantizar envío inmediato
+- Añadidos mensajes de depuración [DEBUG] cuando se envían comandos M o C
+- Mejores instrucciones al usuario al inicio del juego
+
+**Juego (Juego.java)**:
+- Eliminado logging excesivo en cortaroMus()
+- Mantenida la lógica para aceptar tanto 'M'/'C' como 'Mus'/'Cortar' (mayúsculas/minúsculas)
+
+**Pruebas realizadas**:
+- Prueba automatizada con 4 clientes Java (ClienteAutomatizado.java): todos los jugadores respondieron correctamente
+- Verificado que todos los readerThreads se inician antes del comienzo del juego
+- Confirmado que los mensajes M/C se reciben correctamente en el servidor
+- Sin timeouts ni desconexiones inesperadas
+
+**Cómo usar**:
+```bash
+# Terminal 1: Servidor
+java -cp out main.Servidor
+
+# Terminales 2-5: Clientes
+java -cp out main.Cliente --name Jugador1
+java -cp out main.Cliente --name Jugador2
+java -cp out main.Cliente --name Jugador3
+java -cp out main.Cliente --name Jugador4
+```
+
+Cuando veas "Indica 'M' para Mus o 'C' para Cortar", simplemente escribe M o C y presiona Enter.
+
+---
+
+### v1.0.2 (DEPRECADO - NO USAR)
+**Estado**: NO FUNCIONAL - contiene condición de carrera y bloqueo en cliente
 
 **Cambios implementados**:
-- **Cliente (`src/main/Cliente.java`)**:
-  - Normalización de comandos Mus/Cortar: ahora acepta 'M' (mayúscula o minúscula) para Mus y 'C' para Cortar, enviando siempre la versión en mayúscula al servidor.
-  - Añadido log de depuración `(enviado) -> <mensaje>` para rastrear todo lo que el cliente envía al servidor.
+- Implementado hilo lector dedicado (readerThread) en PlayerHandler con BlockingQueue
+- recibirLineaJugador() modificado para usar messageQueue.poll() con timeout
+- Protocolo simplificado: aceptación de 'M'/'C' para Mus/Cortar
+- Añadidos logs de depuración extensivos ([LOG_RECV], [LOG_ENQUEUE], [ACK_RECV])
 
-- **Servidor (`src/main/PlayerHandler.java`)**:
-  - Implementado un hilo lector dedicado (`readerThread`) que encola todos los mensajes recibidos del cliente en una `BlockingQueue`.
-  - `recibirLineaJugador()` ahora lee desde la cola usando `take()` (bloqueante) en lugar de leer directamente del socket.
-  - Añadidos logs de depuración: `[LOG_RECV]`, `[LOG_ENQUEUE]`, `[recibirLineaJugador]` y ACK al cliente `[ACK_RECV]`.
-  - El hilo principal de `PlayerHandler` se mantiene vivo después del `CyclicBarrier` para no cerrar la conexión prematuramente.
+**Problemas conocidos**: 
+- Condición de carrera: readerThread se iniciaba DESPUÉS de addPlayer(), causando que el cuarto jugador nunca recibiera mensajes
+- Cliente bloqueado indefinidamente en esperarConfiguracionInicial() compitiendo con ServerListener
 
-- **Servidor (`src/main/Servidor.java`)**:
-  - Soporte para sobrescribir el puerto mediante property `-Dserver.port=XXXX` o variable de entorno `SERVER_PORT`.
-
-- **Juego (`src/main/Juego.java`)**:
-  - Actualizado `cortaroMus()` para aceptar tanto las palabras completas ("Mus", "Cortar") como las letras simples ('M', 'C').
-  - Añadidos logs `[cortaroMus] Preguntando a...` y `[cortaroMus] respuesta obtenida...` para depuración.
-  - Prompt mejorado: "Indica 'M' para Mus o 'C' para Cortar (una sola letra, mayúscula o minúscula aceptada)."
-
-**Síntoma del problema**:
-- El cliente muestra `(enviado) -> M` indicando que envió el mensaje.
-- El servidor muestra `[recibirLineaJugador] hilo=pool-1-thread-X interrupted=false queueSize=0`, lo que indica que la cola está vacía cuando `Juego` intenta leer la respuesta.
-- A veces aparece `[cortaroMus] respuesta obtenida de <jugador>: <null>`, confirmando que no se recibió respuesta.
-
-**Posible causa**: Puede haber un problema de sincronización entre el momento en que el `readerThread` lee del socket y encola el mensaje, y el momento en que `Juego` llama a `recibirLineaJugador()`. Se requiere investigación adicional sobre el orden de ejecución de los hilos y posibles condiciones de carrera.
-
-**Recomendación**: No usar esta versión para jugar. Revertir a v1.0.1 o esperar a la corrección en v1.0.3.
+**Recomendación**: Actualizar a v1.0.3 o superior.
 
 ---
 
 ### v1.0.1
-Nota: estos cambios se hicieron para corregir errores de sincronización, comparación de jugadores y mejorar la experiencia de ejecución local.
+**Estado**: Mejoras de sincronización y experiencia de usuario
+
+**Cambios principales**:
+- Implementados métodos equals() y hashCode() en Jugador.java para correcta comparación
+- Añadido main() en Jugador.java que delega a Cliente para facilitar ejecución
+- Cliente acepta --name NAME para uso en scripts automatizados
+- Filtrado de mensajes de protocolo (COD XX) en el cliente para mejor experiencia visual
+- Mejoras en PlayerHandler: mejor logging y manejo de desconexiones
+- Servidor usa ExecutorService para gestión de hilos de clientes
+- Correcciones en Juego: índices modulares, broadcast cuando se corta Mus, mejor manejo de entradas nulas
+- Scripts run_all.sh y stop_all.sh para automatización
+
+---
+
+### v1.0.0
+**Estado**: Versión inicial con errores de compilación y lógica
+
+**Características implementadas**:
+- Servidor TCP básico en puerto 12346
+- Sistema de turnos y reparto de cartas
+- Estructura de clases: Servidor, Cliente, Jugador, PlayerHandler, Juego
+- Modelo de cartas: Deck, Card, Suit, Compara
+- Códigos de protocolo definidos en INFO/CODS
+
+**Problemas conocidos**:
+- Errores de compilación en múltiples archivos
+- Falta de sincronización entre hilos
+- Comparación incorrecta de jugadores (sin equals/hashCode)
+- Manejo deficiente de desconexiones
+- Sin scripts de automatización
 
 - `src/main/Jugador.java`
   - Añadido `equals(Object)` y `hashCode()` correctos.

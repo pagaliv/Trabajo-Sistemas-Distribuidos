@@ -44,9 +44,9 @@ public class Cliente {
         new Thread(new ServerListener(), "ServerListener").start();
 
         identificarJugador(); // Fase 1: Identificación
-        esperarConfiguracionInicial(); // Fase 2: Configuración inicial
-        jugar(); // Fase 3: Interacción en el juego
-        disconnect(); // Fase 4: Desconexión
+        // NO llamamos a esperarConfiguracionInicial() porque el ServerListener ya maneja todos los mensajes
+        jugar(); // Fase 2: Interacción en el juego
+        disconnect(); // Fase 3: Desconexión
     }
 
     // Establece la conexión con el servidor
@@ -129,6 +129,8 @@ public class Cliente {
      */
     public void jugar() {
         System.out.println("¡El juego ha comenzado!");
+        System.out.println("Escribe tus comandos y presiona Enter.");
+        System.out.println("Cuando te pregunten por Mus/Cortar, escribe 'M' o 'C' y presiona Enter.");
         // Leer líneas desde la consola y enviarlas al servidor
         try (BufferedReader consoleInput = new BufferedReader(new InputStreamReader(System.in))) {
             String userInput;
@@ -142,9 +144,11 @@ public class Cliente {
                 String trimmed = userInput.trim();
                 if (trimmed.equalsIgnoreCase("c")) {
                     sendMessage("C");
+                    System.out.println("[DEBUG] Comando CORTAR enviado al servidor");
                     continue;
                 } else if (trimmed.equalsIgnoreCase("m")) {
                     sendMessage("M");
+                    System.out.println("[DEBUG] Comando MUS enviado al servidor");
                     continue;
                 }
 
@@ -189,8 +193,10 @@ public class Cliente {
      * @param message Mensaje a enviar.
      */
     public void sendMessage(String message) {
+        System.out.println("(enviando) -> " + message); // Log de depuración antes de enviar
         if (out != null) {
             out.println(message);
+            out.flush(); // Forzar el envío inmediato
             // Log de depuración: mostrar lo que enviamos al servidor
             System.out.println("(enviado) -> " + message);
         } else {

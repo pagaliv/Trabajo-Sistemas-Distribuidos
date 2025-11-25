@@ -429,12 +429,11 @@ public class Juego {
         public boolean cortaroMus(){
             for(int i=indiceJugadorActual; i<indiceJugadorActual+4;i++){
                 PlayerHandler ph = jugadores.get(i % 4);
-                System.out.println("[cortaroMus] Preguntando a " + ph.Jugador().getNombre() + " si quiere Mus/Cortar");
                 ph.sendMensajeJugador("Indica 'M' para Mus o 'C' para Cortar (una sola letra, mayúscula o minúscula aceptada).");
-                ph.sendMensajeJugador("COD 23");
-
+                
                 String msg = ph.recibirLineaJugador();
-                System.out.println("[cortaroMus] respuesta obtenida de " + ph.Jugador().getNombre() + ": " + (msg == null ? "<null>" : ("'" + msg + "'")) );
+                
+                java.util.logging.Logger.getLogger(Juego.class.getName()).info(String.valueOf(msg));
                 if (msg == null) {
                     // Si el jugador se desconectó o no respondió, tratamos como error y seguimos
                     ph.sendMensajeJugador("ERROR");
@@ -453,7 +452,7 @@ public class Juego {
                 } else {
                     ph.sendMensajeJugador("ERROR");
                 }
-
+                ph.sendMensajeJugador("COD 23");
             }
             return true;
         }

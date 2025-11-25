@@ -218,12 +218,13 @@ El repositorio incluye `src/INFO/CODS` con los códigos que emplea el servidor p
 
 El cliente actual filtra las líneas que empiezan por `COD ` para no mostrarlas directamente al usuario. Si deseas que se muestren (por ejemplo para depuración), coméntalo en el cliente.
 
-## Limitaciones conocidas y próximos pasos recomendados
-
-- Lógica del Mus incompleta: la resolución de apuestas, comparaciones exactas de manos y manejo de empates requieren mayor trabajo para cumplir todas las reglas del Mus.
+## Limitaciones conocidas y próximos pasos
+En el caso de repetir la asignatura una vez más, que espero por todo lo que quiero que asi no sea, las posibles mejoras serían: 
+- Lógica del Mus mejorable: la resolución de apuestas, comparaciones exactas de manos y manejo de empates requieren mayor trabajo para cumplir todas las reglas del Mus.
 - Robustez de entradas: actualmente el servidor asume formatos concretos de respuesta. Recomiendo normalizar y validar (trim, casefold) todas las entradas y añadir timeouts y reintentos.
 - Separación de protocolo/visualización: implementar mensajes estructurados (ej. `TYPE:TURN|WHO:pepe`) reducirá ambigüedad entre mensajes de control y mensajes legibles por el jugador.
 - Tests: añadir pruebas unitarias para `MD` (mazo, comparación) y tests de integración para el flujo servidor-client.
+- Crear salas a las que poder apuntarse. 
 
 ## Cómo contribuir / pruebas rápidas
 
@@ -232,4 +233,4 @@ El cliente actual filtra las líneas que empiezan por `COD ` para no mostrarlas 
 
 # Autor
 
-- Desarrollado y mantenido por [pagaliv](https://github.com/pagaliv)(Menuda documentación se ha marcado)
+- Desarrollado y mantenido por [pagaliv](https://github.com/pagaliv)

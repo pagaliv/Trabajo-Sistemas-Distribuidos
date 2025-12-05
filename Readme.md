@@ -37,6 +37,26 @@ Scripts auxiliares (en la raíz):
 - `stop_all.sh` — Detiene procesos Java que correspondan a `main.Servidor` o `main.Cliente` y deja los logs en `logs/`.
 
 ## Cambios recientes (resumen de lo que se ha modificado)
+### v1.0.4 (PATCH - 05 Dec 2025)
+**Estado**: PATCH — Correcciones de robustez y validaciones adicionales
+
+Resumen de cambios rápidos (v1.0.4):
+
+- Añadida repartición inicial de cartas al inicio de cada mano para asegurar que los jugadores tienen mano antes de la fase Mus/Cortar (`Juego.repartirCartas()` se invoca al comienzo de la mano).
+- Reforzada la función de descarte (`repartirCartasMus()`): validación de entrada (null/empty), parseo seguro con manejo de NumberFormatException, validación de índices (evita IndexOutOfBounds) y comportamiento de reintento/informe al jugador en caso de error.
+- Evitados NPEs en la resolución de órdago: comprobaciones `null` antes de usar `equalsIgnoreCase` para las respuestas adversarias (resp1/resp2).
+- Uso de `jugadores.size()` donde era posible en la fase de recambios para evitar asumir un tamaño fijo (más tolerante si cambias el número de participantes en pruebas).
+- Compilación verificada localmente: `javac -d out $(find src -name "*.java")` completó sin errores.
+
+Archivos modificados en este parche:
+
+- `src/main/Juego.java` — Lógica de reparto y validaciones en la fase de intercambio/descartes; protecciones contra entradas inválidas y NPEs.
+
+Impacto y próximos pasos:
+
+- Estos cambios son de bajo riesgo y evitan fallos comunes que causaban cierres abruptos o excepciones durante la fase de descarte y ordago. No cambian reglas del juego, sólo aumentan la robustez del protocolo y la tolerancia a entradas erróneas.
+- Recomendado: ejecutar una partida de prueba (servidor + 4 clientes automatizados) para validar el flujo completo (aún quedan tareas pendientes en la lista de prioridades: refactorizar CyclicBarrier y añadir tests de integración automatizados).
+
 
 ### v1.0.3 (FUNCIONAL - 25 Nov 2025)
 **Estado**: FUNCIONAL - Problema crítico de comunicación cliente-servidor RESUELTO

@@ -37,6 +37,8 @@ public class Juego {
                         p.sendMensajeJugador("Espera tu turno; jugador actual: " + activo.Jugador().getNombre());
                     }
                 }
+                // Repartir las cartas al inicio de la mano (asegura que los jugadores tengan mano antes de decidir Mus/Cortar)
+                repartirCartas();
                 if(!cortaroMus()){
                     mensajeTodosJugadores("No ha habido mus");
                     apuestas();
@@ -44,6 +46,7 @@ public class Juego {
                     mensajeTodosJugadores("Habra mus");
                     repartirCartasMus();
                 }
+
 
             indiceJugadorActual++;
             }
@@ -319,7 +322,7 @@ public class Juego {
                 //De este modo no es eficiente porque tendran que esperar a que ambos jugadores respondan
                 String resp1 = jugadores.get((jugadorOrdago + 1) % 4).recibirLineaJugador();
                 String resp2 = jugadores.get((jugadorOrdago + 3) % 4).recibirLineaJugador();
-                if (resp1.equalsIgnoreCase("aceptar ordago")) {
+                         if (resp1 != null && resp1.equalsIgnoreCase("aceptar ordago")) {
                     int ganador;
                     jugadores.get((jugadorOrdago + 1) % 4).sendMensajeJugador("OK");
                     switch (paloOrdago) {
@@ -356,7 +359,7 @@ public class Juego {
                 } else {
                     jugadores.get((jugadorOrdago + 1) % 4).sendMensajeJugador("ERROR");
                 }
-                if (resp2.equalsIgnoreCase("aceptar ordago")) {
+                    if (resp2 != null && resp2.equalsIgnoreCase("aceptar ordago")) {
                     int ganador;
                     jugadores.get((jugadorOrdago + 3) % 4).sendMensajeJugador("OK");
                     switch (paloOrdago) {
@@ -410,20 +413,31 @@ public class Juego {
         // Reparte cartas a los jugadores
         private void repartirCartas() {
             int cartasPorJugador = 4; // Ejemplo: cada jugador recibe 4 cartas
+            // Limpiar manos previas antes de repartir
+            for (PlayerHandler ph : jugadores) {
+                ph.Jugador().descartarCartas();
+            }
+
             for (int i = 0; i < cartasPorJugador; i++) {
                 for (PlayerHandler jugador : jugadores) {
                     if (deck.getNumeroCartas() > 0) {
                         jugador.Jugador().addCard(deck.deleteCardInPosition(0));
-                    }else{
-                        deck=new Deck();
-                        for (PlayerHandler player:jugadores){
-                            for(Card cartaParaEliminar:player.Jugador().getMano()){
+                    } else {
+                        deck = new Deck();
+                        for (PlayerHandler player : jugadores) {
+                            for (Card cartaParaEliminar : player.Jugador().getMano()) {
                                 deck.deleteCard(cartaParaEliminar);
                             }
                         }
                         jugador.Jugador().addCard(deck.deleteCardInPosition(0));
                     }
                 }
+            }
+
+            // Enviar la mano a cada jugador para que la vea en su cliente
+            for (PlayerHandler ph : jugadores) {
+                ph.sendMensajeJugador("Tus cartas son:");
+                leerCartasJugador(ph);
             }
         }
         public boolean cortaroMus(){

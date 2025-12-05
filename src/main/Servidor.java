@@ -120,8 +120,7 @@ public class Servidor {
         //  enviar un mensaje a todos los jugadores
         broadcastMessage("La partida está comenzando...");
 
-        // Aquí podrías inicializar la lógica del juego, como asignar cartas, iniciar turnos, etc.
-        // Esto podría incluir instanciar un objeto de la clase `Juego` y pasarle la lista de jugadores.
+        
         juego = new Juego(jugadores,cyclicBarrier);
         juego.jugar();
     }

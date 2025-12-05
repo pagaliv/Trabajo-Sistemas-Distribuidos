@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<GameSnapshot currentPlayerIndex="7" timestamp="2025-12-05T10:02:55.950850041Z">
+  <Players>
+    <Player active="true" index="0" name="1" score="0">
+      <Hand>
+        <Card suit="oros" value="9"/>
+        <Card suit="bastos" value="3"/>
+        <Card suit="bastos" value="7"/>
+        <Card suit="espadas" value="1"/>
+      </Hand>
+    </Player>
+    <Player active="true" index="1" name="2" score="0">
+      <Hand>
+        <Card suit="oros" value="10"/>
+        <Card suit="bastos" value="4"/>
+        <Card suit="bastos" value="8"/>
+        <Card suit="espadas" value="2"/>
+      </Hand>
+    </Player>
+    <Player active="true" index="2" name="3" score="0">
+      <Hand>
+        <Card suit="bastos" value="1"/>
+        <Card suit="bastos" value="5"/>
+        <Card suit="bastos" value="9"/>
+        <Card suit="espadas" value="3"/>
+      </Hand>
+    </Player>
+    <Player active="true" index="3" name="4" score="0">
+      <Hand>
+        <Card suit="bastos" value="2"/>
+        <Card suit="bastos" value="6"/>
+        <Card suit="bastos" value="10"/>
+        <Card suit="espadas" value="4"/>
+      </Hand>
+    </Player>
+  </Players>
+</GameSnapshot>

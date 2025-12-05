@@ -37,29 +37,68 @@ Scripts auxiliares (en la raíz):
 - `stop_all.sh` — Detiene procesos Java que correspondan a `main.Servidor` o `main.Cliente` y deja los logs en `logs/`.
 
 ## Cambios recientes (resumen de lo que se ha modificado)
+### v1.1.0 (MINOR - 05 Dec 2025)
+**Estado**: MINOR — Nueva persistencia XML (DOM) y mejora del flujo de apuestas
+
+Resumen de cambios (v1.1.0):
+
+- Persistencia XML (DOM): se añadió una clase `src/main/GamePersistence.java` que escribe un snapshot del estado de la partida en `game_snapshot.xml` cada vez que se reparten cartas (`Juego.repartirCartas()` hace la llamada por defecto). El snapshot contiene metadata (timestamp, índice de jugador actual), lista de jugadores (nombre, puntuación, activo) y sus manos (cartas con value/suit). Esta persistencia es una snapshot ligera pensada para inspección y recuperación manual.
+- Avance de fase automático al aceptar apuestas: cuando un adversario acepta una apuesta en fases como Grandes o Pequeñas, la partida avanza correctamente a la siguiente fase en lugar de quedarse bloqueada. Se introdujeron flags (`grandesAccepted`, `pequeAccepted`) y un helper `promptAdversariosAceptarApuesta(...)` que notifica a los rivales en orden. Además `procesarFaseApuesta(...)` puede retornar un código especial (-3) para indicar que la apuesta fue aceptada y que hay que avanzar de fase.
+- Envío de manos a clientes reforzado: confirmado que los jugadores reciben su mano al inicio de cada mano (ya presente en v1.0.5, integrado y verificado junto con la persistencia).
+- Limpieza y estabilidad: se limpió la clase `Juego.java` quitando bloques duplicados y restaurando coherencia tras las modificaciones iterativas; se añadieron getters públicos (`getJugadores()`, `getIndiceJugadorActual()`) para que `GamePersistence` pueda serializar el estado sin romper encapsulamiento.
+- Compatibilidad de formatos de apuesta: mantiene la aceptación de variantes ("Apostar <n>", "Apostar" + número en la siguiente línea, o solo el número) y robustez en el parseo.
+
+Detalles técnicos y uso:
+
+- Archivo de snapshot por defecto: `game_snapshot.xml` en el directorio de trabajo del servidor. Contenido mínimo:
+  - `<GameSnapshot timestamp="..." currentPlayerIndex="N">`
+  - `<Players><Player index="0" name="Alice" score="10" active="true"><Hand><Card value="1" suit="OROS"/></Hand></Player>...</Players>`
+  - `</GameSnapshot>`
+- Cambiar comportamiento / ruta: por ahora la ruta está codificada en la llamada dentro de `Juego.repartirCartas()`; si deseas que sea configurable (argumento o archivo de configuración), puedo implementarlo en una PR separada.
+- Avance de fase por aceptación: cuando un adversario responde "A" (aceptar) tras una apuesta, la función de control procesa ese evento y avanza la fase; si la respuesta es negativa o no llega en timeout, el flujo normal de pasar/contraapuesta continúa. El timeout por defecto para lecturas sigue siendo el de `PlayerHandler.recibirLineaJugador()` (poll(30s)). Podemos reducirlo a un valor más corto para prompts de aceptación si lo deseas.
+
+Archivos añadidos/modificados clave en este lanzamiento:
+
+- `src/main/GamePersistence.java` — nueva: serializa snapshot DOM.
+- `src/main/Juego.java` — modificado: llamadas a `GamePersistence.saveSnapshot(...)` tras repartir, getters públicos (`getJugadores()`, `getIndiceJugadorActual()`), flags de fase (`grandesAccepted`, `pequeAccepted`), y lógica para avanzar fase cuando un adversario acepta una apuesta.
+
+Impacto y próximos pasos recomendados:
+
+- Verificar los snapshots: lanza una partida, espera al primer reparto y abre `game_snapshot.xml` para inspeccionar la estructura.
+- Hacer la ruta de snapshot configurable y añadir `loadGameFromXml(...)` para restaurar partidas (pendiente/puede implementarse como v1.2.0 si se desea).
+- Ajustar timeout de prompts de aceptación (actual 30s) si quieres una UX más rápida: puedo implementarlo para prompts concretos sin afectar el `recibirLineaJugador()` global.
+
+Compilación y verificación:
+
+- El proyecto fue compilado localmente con `javac` tras las modificaciones y no presenta errores de compilación (se verificó `javac -d out src/MD/*.java src/main/*.java`).
+
+Notas finales:
+
+- Esta versión introduce persistencia no intrusiva y una mejora funcional clave en las apuestas: aceptar hace avanzar fases. Si quieres, actualizo el README con ejemplos de un `game_snapshot.xml` real generado en una ejecución y añado instrucciones rápidas para restaurar una partida desde XML.
+
 ### v1.0.5 (PATCH - 05 Dec 2025)
 **Estado**: PATCH — Mejoras en reparto y en el flujo de apuestas
 
 Resumen de cambios rápidos (v1.0.5):
 
-- Envío de la mano al cliente al comienzo de cada mano: `Juego.repartirCartas()` ahora limpia manos previas, reparte cartas y llama a `leerCartasJugador(...)` para que cada cliente vea inmediatamente su mano en la consola.
-- Robustecimiento del reparto: `repartirCartas()` ahora descarta manos anteriores antes de repartir para evitar acumulación de cartas en pruebas continuas.
-- Flujo de apuestas más tolerante: en las fases Grandes/Pequeñas/Pares y en el helper `procesarFaseApuesta(...)` se aceptan formatos adicionales de apuesta:
-  - "Apostar" y luego la cantidad en la siguiente línea (compatibilidad hacia atrás).
-  - "Apostar <cantidad>" en una sola línea.
-  - "<cantidad>" (número solo en una línea).
-  Esto reduce respuestas "ERROR" cuando clientes manuales o bots usan variantes razonables del protocolo.
-- Validaciones adicionales: entradas numéricas en apuestas se parsean con control de errores y se validan antes de aplicarlas.
-- Compilación verificada localmente tras los cambios.
+ - Envío de la mano al cliente al comienzo de cada mano: `Juego.repartirCartas()` ahora limpia manos previas, reparte cartas y llama a `leerCartasJugador(...)` para que cada cliente vea inmediatamente su mano en la consola.
+ - Robustecimiento del reparto: `repartirCartas()` ahora descarta manos anteriores antes de repartir para evitar acumulación de cartas en pruebas continuas.
+ - Flujo de apuestas más tolerante: en las fases Grandes/Pequeñas/Pares y en el helper `procesarFaseApuesta(...)` se aceptan formatos adicionales de apuesta:
+   - "Apostar" y luego la cantidad en la siguiente línea (compatibilidad hacia atrás).
+   - "Apostar <cantidad>" en una sola línea.
+   - "<cantidad>" (número solo en una línea).
+   Esto reduce respuestas "ERROR" cuando clientes manuales o bots usan variantes razonables del protocolo.
+ - Validaciones adicionales: entradas numéricas en apuestas se parsean con control de errores y se validan antes de aplicarlas.
+ - Compilación verificada localmente tras los cambios.
 
 Archivos modificados en este parche:
 
-- `src/main/Juego.java` — limpieza de manos antes de repartir, envío de la mano al cliente, y aceptación de nuevos formatos de apuesta (inline y numérico).
+ - `src/main/Juego.java` — limpieza de manos antes de repartir, envío de la mano al cliente, y aceptación de nuevos formatos de apuesta (inline y numérico).
 
 Impacto y próximos pasos:
 
-- Estos cambios mejoran la experiencia del jugador (ven su mano al inicio de la mano) y reducen errores de protocolo en la fase de apuestas. Siguen sin cambiar las reglas del juego.
-- Recomendado: ejecutar un playtest con 4 clientes para verificar apuestas en los tres formatos ("Apostar\n5", "Apostar 5", "5").
+ - Estos cambios mejoran la experiencia del jugador (ven su mano al inicio de la mano) y reducen errores de protocolo en la fase de apuestas. Siguen sin cambiar las reglas del juego.
+ - Recomendado: ejecutar un playtest con 4 clientes para verificar apuestas en los tres formatos ("Apostar\n5", "Apostar 5", "5").
 
 ### v1.0.4 (PATCH - 05 Dec 2025)
 **Estado**: PATCH — Correcciones de robustez y validaciones adicionales

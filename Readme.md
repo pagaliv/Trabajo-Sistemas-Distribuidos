@@ -1,5 +1,6 @@
-Resumen de cambios y cómo ejecutar
-
+# MUS ONLINE (SISTEMAS DISTRIBUIDOS) 
+## Resumen de cambios
+Este trabajo esta basado en el creado para la convocatoria del año pasado, implmentando muchas mejoras tanto funcionales como de eficiencia. Las mejoras son las que se encuentran desde la versión 1.0.1 hasta la versión actual. 
 He realizado una serie de correcciones para que el proyecto sea compilable y para arreglar errores lógicos críticos en el flujo del servidor/juego.
 
 Archivos modificados

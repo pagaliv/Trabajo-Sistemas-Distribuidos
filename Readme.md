@@ -37,6 +37,30 @@ Scripts auxiliares (en la raíz):
 - `stop_all.sh` — Detiene procesos Java que correspondan a `main.Servidor` o `main.Cliente` y deja los logs en `logs/`.
 
 ## Cambios recientes (resumen de lo que se ha modificado)
+### v1.0.5 (PATCH - 05 Dec 2025)
+**Estado**: PATCH — Mejoras en reparto y en el flujo de apuestas
+
+Resumen de cambios rápidos (v1.0.5):
+
+- Envío de la mano al cliente al comienzo de cada mano: `Juego.repartirCartas()` ahora limpia manos previas, reparte cartas y llama a `leerCartasJugador(...)` para que cada cliente vea inmediatamente su mano en la consola.
+- Robustecimiento del reparto: `repartirCartas()` ahora descarta manos anteriores antes de repartir para evitar acumulación de cartas en pruebas continuas.
+- Flujo de apuestas más tolerante: en las fases Grandes/Pequeñas/Pares y en el helper `procesarFaseApuesta(...)` se aceptan formatos adicionales de apuesta:
+  - "Apostar" y luego la cantidad en la siguiente línea (compatibilidad hacia atrás).
+  - "Apostar <cantidad>" en una sola línea.
+  - "<cantidad>" (número solo en una línea).
+  Esto reduce respuestas "ERROR" cuando clientes manuales o bots usan variantes razonables del protocolo.
+- Validaciones adicionales: entradas numéricas en apuestas se parsean con control de errores y se validan antes de aplicarlas.
+- Compilación verificada localmente tras los cambios.
+
+Archivos modificados en este parche:
+
+- `src/main/Juego.java` — limpieza de manos antes de repartir, envío de la mano al cliente, y aceptación de nuevos formatos de apuesta (inline y numérico).
+
+Impacto y próximos pasos:
+
+- Estos cambios mejoran la experiencia del jugador (ven su mano al inicio de la mano) y reducen errores de protocolo en la fase de apuestas. Siguen sin cambiar las reglas del juego.
+- Recomendado: ejecutar un playtest con 4 clientes para verificar apuestas en los tres formatos ("Apostar\n5", "Apostar 5", "5").
+
 ### v1.0.4 (PATCH - 05 Dec 2025)
 **Estado**: PATCH — Correcciones de robustez y validaciones adicionales
 

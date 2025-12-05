@@ -33,8 +33,10 @@ public class Cliente {
 
     // Método principal que inicia el flujo del cliente
     /**
-     * Precondición: Los métodos internos deben estar correctamente implementados.
-     * Postcondición: Se realiza la conexión, identificación, juego y desconexión.
+    * Inicia el flujo principal del cliente: conecta, se identifica, participa en el juego y se desconecta.
+    *
+    * Precondición: Los métodos internos deben estar correctamente implementados.
+    * Postcondición: Se realiza la conexión, identificación, juego y desconexión.
      */
     public void start() {
         if (!conectar()) {
@@ -51,9 +53,11 @@ public class Cliente {
 
     // Establece la conexión con el servidor
     /**
-     * Precondición: El host y el puerto deben ser válidos.
-     * Postcondición: Establece la conexión con el servidor y crea los flujos de entrada/salida.
-     * @return true si la conexión fue exitosa, false en caso contrario.
+    * Intenta establecer la conexión TCP con el servidor y crear los flujos de E/S.
+    *
+    * Precondición: El host y el puerto deben ser válidos.
+    * Postcondición: Establece la conexión con el servidor y crea los flujos de entrada/salida.
+    * @return true si la conexión fue exitosa, false en caso contrario.
      */
     public boolean conectar() {
         try {
@@ -71,8 +75,10 @@ public class Cliente {
 
     // Identifica al jugador solicitando un nombre válido
     /**
-     * Precondición: El cliente debe estar conectado al servidor y `out` no debe ser null.
-     * Postcondición: Se envía un nombre válido al servidor.
+    * Solicita y valida un nombre de jugador (solo letras y números) y lo envía al servidor.
+    *
+    * Precondición: El cliente debe estar conectado al servidor y `out` no debe ser null.
+    * Postcondición: Se envía un nombre válido al servidor.
      */
     public void identificarJugador() {
         String regex = "^[a-zA-Z0-9]+$"; // Solo letras y números
@@ -102,8 +108,10 @@ public class Cliente {
 
     // Espera la configuración inicial del juego desde el servidor
     /**
-     * Precondición: El cliente debe estar conectado al servidor y `in` no debe ser null.
-     * Postcondición: Procesa la configuración inicial enviada por el servidor.
+    * Lee mensajes del servidor hasta que se reciba la indicación de que la configuración inicial está lista.
+    *
+    * Precondición: El cliente debe estar conectado al servidor y `in` no debe ser null.
+    * Postcondición: Procesa la configuración inicial enviada por el servidor.
      */
     public void esperarConfiguracionInicial() {
         System.out.println("Esperando configuración inicial del juego...");
@@ -124,8 +132,10 @@ public class Cliente {
 
     // Realiza la lógica principal del juego
     /**
-     * Precondición: El cliente debe estar conectado al servidor y los flujos (`in`, `out`) deben estar inicializados.
-     * Postcondición: Permite la interacción del cliente con el servidor durante el juego.
+    * Bucle principal de interacción: lee entradas del usuario y las envía al servidor hasta que se salga.
+    *
+    * Precondición: El cliente debe estar conectado al servidor y los flujos (`in`, `out`) deben estar inicializados.
+    * Postcondición: Permite la interacción del cliente con el servidor durante el juego.
      */
     public void jugar() {
         System.out.println("¡El juego ha comenzado!");
@@ -162,8 +172,10 @@ public class Cliente {
 
     // Cierra las conexiones y recursos abiertos
     /**
-     * Precondición: Ninguna, puede ser invocado en cualquier estado.
-     * Postcondición: Se cierran los recursos abiertos como el socket, flujos de entrada/salida.
+    * Cierra de forma segura los flujos y el socket del cliente.
+    *
+    * Precondición: Ninguna, puede ser invocado en cualquier estado.
+    * Postcondición: Se cierran los recursos abiertos como el socket, flujos de entrada/salida.
      */
     public void disconnect() {
         if (in != null) {
@@ -188,9 +200,11 @@ public class Cliente {
 
     // Envía un mensaje al servidor
     /**
-     * Precondición: `out` no debe ser null.
-     * Postcondición: El mensaje se envía al servidor.
-     * @param message Mensaje a enviar.
+    * Envía una línea al servidor usando el `PrintWriter` asociado.
+    *
+    * Precondición: `out` no debe ser null.
+    * Postcondición: El mensaje se envía al servidor.
+    * @param message Mensaje a enviar.
      */
     public void sendMessage(String message) {
         System.out.println("(enviando) -> " + message); // Log de depuración antes de enviar
@@ -206,8 +220,10 @@ public class Cliente {
 
     // Lee una sola línea del servidor
     /**
-     * Precondición: `in` no debe ser null.
-     * Postcondición: Se imprime una línea recibida del servidor.
+    * Lee y muestra una única línea enviada por el servidor (bloqueante).
+    *
+    * Precondición: `in` no debe ser null.
+    * Postcondición: Se imprime una línea recibida del servidor.
      */
     public void leerUnaSolaLinea() {
         try {
@@ -222,8 +238,10 @@ public class Cliente {
 
     // Lee múltiples líneas del servidor hasta encontrar "COD 23"
     /**
-     * Precondición: `in` no debe ser null.
-     * Postcondición: Se imprimen múltiples líneas recibidas del servidor.
+    * Lee y muestra líneas del servidor hasta que se reciba la marca de terminación de bloque `COD 23`.
+    *
+    * Precondición: `in` no debe ser null.
+    * Postcondición: Se imprimen múltiples líneas recibidas del servidor.
      */
     public void leerVariasLineas() {
         String mensaje;
@@ -246,9 +264,9 @@ public class Cliente {
             try {
                 String serverMessage;
                 while ((serverMessage = in.readLine()) != null) {
-                    // Filtrar mensajes de protocolo (ej. COD 23) para no mostrarlos al usuario final
+                    // Filtrar mensajes de protocolo (ej. COD 23) para no mostrarlos al usuario final.
+                    // Para depuración, descomente la impresión de protocolo indicada a continuación.
                     if (serverMessage != null && serverMessage.startsWith("COD ")) {
-                        // Si necesitas verlos para depuración, descomenta la siguiente línea
                         // System.out.println("(PROTO) " + serverMessage);
                         continue;
                     }

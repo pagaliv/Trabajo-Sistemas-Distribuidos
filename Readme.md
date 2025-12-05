@@ -54,8 +54,8 @@ Detalles técnicos y uso:
   - `<GameSnapshot timestamp="..." currentPlayerIndex="N">`
   - `<Players><Player index="0" name="Alice" score="10" active="true"><Hand><Card value="1" suit="OROS"/></Hand></Player>...</Players>`
   - `</GameSnapshot>`
-- Cambiar comportamiento / ruta: por ahora la ruta está codificada en la llamada dentro de `Juego.repartirCartas()`; si deseas que sea configurable (argumento o archivo de configuración), puedo implementarlo en una PR separada.
-- Avance de fase por aceptación: cuando un adversario responde "A" (aceptar) tras una apuesta, la función de control procesa ese evento y avanza la fase; si la respuesta es negativa o no llega en timeout, el flujo normal de pasar/contraapuesta continúa. El timeout por defecto para lecturas sigue siendo el de `PlayerHandler.recibirLineaJugador()` (poll(30s)). Podemos reducirlo a un valor más corto para prompts de aceptación si lo deseas.
+ - Cambiar comportamiento / ruta: por ahora la ruta está codificada en la llamada dentro de `Juego.repartirCartas()`. Para personalizarla, modifique la llamada en `Juego.repartirCartas()` o extraiga la ruta a una propiedad de configuración.
+ - Avance de fase por aceptación: cuando un adversario responde "A" (aceptar) tras una apuesta, la función de control procesa ese evento y avanza la fase; si la respuesta es negativa o no llega en timeout, el flujo normal de pasar/contraapuesta continúa. El timeout por defecto para lecturas sigue siendo el de `PlayerHandler.recibirLineaJugador()` (poll(30s)). Es posible ajustar un timeout específico para prompts de aceptación si se desea una respuesta más rápida.
 
 Archivos añadidos/modificados clave en este lanzamiento:
 
@@ -66,7 +66,7 @@ Impacto y próximos pasos recomendados:
 
 - Verificar los snapshots: lanza una partida, espera al primer reparto y abre `game_snapshot.xml` para inspeccionar la estructura.
 - Hacer la ruta de snapshot configurable y añadir `loadGameFromXml(...)` para restaurar partidas (pendiente/puede implementarse como v1.2.0 si se desea).
-- Ajustar timeout de prompts de aceptación (actual 30s) si quieres una UX más rápida: puedo implementarlo para prompts concretos sin afectar el `recibirLineaJugador()` global.
+ - Ajustar timeout de prompts de aceptación (actual 30s) si se desea una UX más rápida: esto puede implementarse con un timeout específico para prompts de aceptación sin modificar el comportamiento global de `recibirLineaJugador()`.
 
 Compilación y verificación:
 
@@ -74,7 +74,7 @@ Compilación y verificación:
 
 Notas finales:
 
-- Esta versión introduce persistencia no intrusiva y una mejora funcional clave en las apuestas: aceptar hace avanzar fases. Si quieres, actualizo el README con ejemplos de un `game_snapshot.xml` real generado en una ejecución y añado instrucciones rápidas para restaurar una partida desde XML.
+- Esta versión introduce persistencia no intrusiva y una mejora funcional clave en las apuestas: aceptar hace avanzar fases. Para generar ejemplos de `game_snapshot.xml`, ejecute una partida y abra el archivo generado; para documentar un proceso de restauración es necesario implementar antes `loadGameFromXml(...)`.
 
 ### v1.0.5 (PATCH - 05 Dec 2025)
 **Estado**: PATCH — Mejoras en reparto y en el flujo de apuestas
@@ -252,7 +252,7 @@ Cuando veas "Indica 'M' para Mus o 'C' para Cortar", simplemente escribe M o C y
 - Scripts añadidos/actualizados:
   - `run_all.sh` y `stop_all.sh` para compilar, lanzar y detener servidor/clientes (logs en `logs/`).
 
-Si necesitas un diff más detallado de los cambios, puedo generarlo o listar las secciones de cada archivo modificadas.
+
 
 ## Cómo construir y ejecutar desde cero (pasos reproducibles)
 
@@ -299,7 +299,7 @@ El repositorio incluye `src/INFO/CODS` con los códigos que emplea el servidor p
 - `COD 19`: La apuesta no supera el valor necesario
 - `COD 69`: El otro equipo quiere hacer ordago
 
-El cliente actual filtra las líneas que empiezan por `COD ` para no mostrarlas directamente al usuario. Si deseas que se muestren (por ejemplo para depuración), coméntalo en el cliente.
+El cliente actual filtra las líneas que empiezan por `COD ` para no mostrarlas directamente al usuario. Para verlas durante la depuración, habilite la impresión de mensajes de protocolo en `src/main/Cliente.java`.
 
 ## Limitaciones conocidas y próximos pasos
 En el caso de repetir la asignatura una vez más, que espero por todo lo que quiero que asi no sea, las posibles mejoras serían: 
